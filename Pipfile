@@ -8,6 +8,8 @@ django = "~=3.2.0"
 black = "*"
 djangorestframework = "*"
 django-cors-headers = "*"
+bandit = "*"
+flake8 = "*"
 
 [dev-packages]
 black = "*"

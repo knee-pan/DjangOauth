@@ -12,6 +12,7 @@ bandit = "*"
 flake8 = "*"
 lint = "*"
 django-oauth-login = "*"
+django-oauth-toolkit = "*"
 
 [dev-packages]
 black = "*"

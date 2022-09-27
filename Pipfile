@@ -10,6 +10,8 @@ djangorestframework = "*"
 django-cors-headers = "*"
 bandit = "*"
 flake8 = "*"
+lint = "*"
+django-oauth-login = "*"
 
 [dev-packages]
 black = "*"

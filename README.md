@@ -9,3 +9,9 @@ INSTALLED_APPS = [
     ...
     "oauth2_provider",
 ]
+
+
+urlpatterns = [
+    ...
+    path('o/', include('oauth2_provider.urls', namespace='oauth2_provider')),
+]

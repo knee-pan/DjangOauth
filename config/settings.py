@@ -40,7 +40,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "rest_framework",
     "account",
-    "oauthlogin",
+    "oauth2_provider",
 ]
 
 AUTH_USER_MODEL = "account.User"

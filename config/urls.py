@@ -16,9 +16,14 @@ Including another URLconf
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import include, path
 
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("o/", include("oauth2_provider.urls", namespace="oauth2_provider")),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+#  http://127.0.0.1:7000/o/applications/register/
+# clientId : x6OuNUjboMa9Jq78lObiFyYNjK7C3DpCcSimfRI9
+# clientSecret : BfZQUY6bwa9xTMG3ABCu8ZwBvTqdueuTaIh3QzHlqAlsh2AtTFJv00y4cDx
+# ONzz9Yrb5CcPjSOmYDWEXAbhBeS8HjdITddtgPIZdxLrd4G85nScI6JyvaKr8EYtktVB4

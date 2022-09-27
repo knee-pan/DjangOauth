@@ -133,3 +133,23 @@ curl -X POST \
     -H "Content-Type: application/x-www-form-urlencoded" \
     "http://127.0.0.1:7000/o/token/" \
     -d "grant_type=client_credentials"
+
+# CORS
+
+* Django'da geliştirilen uygulamaların, farklı etki alanlarında (hatta yalnızca farklı bağlantı noktalarında) barındırılan diğer uygulamalarla etkileşime girmesi gerekebilir. Bu isteklerin başarılı olması için sunucunuzda kaynaklar arası kaynak paylaşımını (CORS) kullanmanız gerekir.
+
+* CORS, farklı etki alanlarında barındırılan kaynaklarla etkileşime izin veren bir mekanizmadır. 
+
+* CORS'un nasıl çalıştığını göstermek için, domain.com'da yaşayan bir web uygulamanız olduğunu varsayalım. Ancak uygulama, kullanıcı bilgilerini kaydetmek için başka bir URL'de barındırılan bir API'yi çağırır; örneğin, api.domain.com. ( örn google ile giriş)
+
+* Bu nedenle, api.domain.com'a veri kaydetme isteği gönderildiğinde, sunucu istekleri başlıklarına ve isteğin kaynağına göre değerlendirir.
+
+* Sunucuda domain.com URL'sine izin verirseniz, uygun yanıtı sağlayacaktır. Etki alanına izin verilmiyorsa, sunucu bir hata verir. Bu bilgi alışverişi, HTTP başlıkları kullanılarak gerçekleşir.
+
+# Errors Involving CORS
+
+* CORS, web istemcilerinin (tarayıcıların) uyguladığı ve belirli bir sunucuya başarısız olma isteğinde bulunabilen bir güvenlik özelliğidir. Bazı olası sunucu yanıtları şunları içerebilir:
+
+**** An unauthorized status (403)
+
+**** An error in a preflight request indicating which URLs can send CORS requests

@@ -15,3 +15,16 @@ urlpatterns = [
     ...
     path('o/', include('oauth2_provider.urls', namespace='oauth2_provider')),
 ]
+
+* Yeni bir projeye başlıyorsanız, varsayılan Users modeli sizin için yeterli olsa bile özel bir Users modeli kurmanız önemle tavsiye edilir.
+* Bu model, varsayılan user modeliyle aynı şekilde davranır, ancak ihtiyaç duyulursa gelecekte bunu özelleştirebileceksiniz. 
+
+from django.contrib.auth.models import AbstractUser
+
+class User(AbstractUser):
+    pass
+
+* settings.py'da hangi user modelinin kullanılacağını belirtmek gerek.
+
+AUTH_USER_MODEL='account.User'
+

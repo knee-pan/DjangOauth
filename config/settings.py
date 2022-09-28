@@ -64,14 +64,12 @@ CORS_ORIGIN_ALLOW_ALL = False
 
 
 CORS_ORIGIN_WHITELIST = (
-    "google.com",
-    "localhost:8000",
-    "127.0.0.1:9000",
     "http://localhost:7000",
 )
 
 CSRF_TRUSTED_ORIGINS = [
     "http://change.allowed.com",
+    "http://django-oauth-toolkit.herokuapp.com/consumer/exchange/",
 ]
 
 CORS_ALLOW_METHODS = [

@@ -139,8 +139,9 @@ curl -X POST \
     "http://127.0.0.1:7000/o/token/" \
     -d "grant_type=client_credentials"
 
-```
-```shell # {"error": "invalid_client"}% ```
+
+# {"error": "invalid_client"}%
+ ```
 
 # CORS
 
@@ -217,4 +218,15 @@ class AccountConfig(AppConfig):
 ```
 
 
+
+* go to http://localhost:8000/admin and log in
+* After that point your browser to http://localhost:8000/o/applications/ and add an Application instance.
+* Client id and Client Secret are automatically generated; you have to provide the rest of the informations.
+
+```shell
+CSRF_TRUSTED_ORIGINS = [
+    "http://change.allowed.com",
+    "http://django-oauth-toolkit.herokuapp.com/consumer/exchange/",
+]
+```
 

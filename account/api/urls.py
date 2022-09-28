@@ -2,7 +2,7 @@ import oauth2_provider.views as oauth2_views
 from django.conf import settings
 from django.urls import include, path
 
-from .views import ApiEndpoint
+from .views import ApiEndpoint, dashboard
 
 # OAuth2 provider endpoints
 oauth2_endpoint_views = [
@@ -56,5 +56,6 @@ urlpatterns = [
     # need to pass in a tuple of the endpoints as well as the app's name
     # because the app_name attribute is not set in the included module
     path("o/",include((oauth2_endpoint_views, "oauth2_provider"), namespace="oauth2_provider")),
-    path("api/hello", ApiEndpoint.as_view()),  # an example resource endpoint
+    path("api/hello/", ApiEndpoint.as_view()),  # an example resource endpoint
+    path("dashboard/", dashboard, name="dashboard"), # curl -H "Authorization: Bearer token1234" -X GET http://localhost:7000/dashboard
 ]

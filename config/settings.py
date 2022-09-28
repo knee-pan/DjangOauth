@@ -47,6 +47,11 @@ INSTALLED_APPS = [
 AUTH_USER_MODEL = "account.User"
 LOGIN_URL = "/admin/login/"
 
+AUTHENTICATION_BACKENDS = [
+    "oauth2_provider.backends.OAuth2Backend",
+]
+
+# checks tokens
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
@@ -58,7 +63,9 @@ MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
     "corsheaders.middleware.CorsPostCsrfMiddleware",
+    "oauth2_provider.middleware.OAuth2TokenMiddleware",
 ]
+
 
 # SOCIALACCOUNT_PROVIDERS = {
 #     "google": {

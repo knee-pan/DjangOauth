@@ -59,17 +59,39 @@ MIDDLEWARE = [
     "django.middleware.common.CommonMiddleware",
     "corsheaders.middleware.CorsPostCsrfMiddleware",
 ]
+
+# SOCIALACCOUNT_PROVIDERS = {
+#     "google": {
+#         "SCOPE": [
+#             "profile",
+#             "email",
+#         ],
+#         "AUTH_PARAMS": {
+#             "access_type": "online",
+#             "redirect_uri": "http://django-oauth-toolkit.herokuapp.com/consumer/exchange/",
+#         },
+#     }
+# }
+
+OAUTH2_PROVIDER = {
+    # this is the list of available scopes
+    "SCOPES": {
+        "read": "Read scope",
+        "write": "Write scope",
+        "groups": "Access to your groups",
+    }
+}
+
 CORS_ALLOW_CREDENTIALS = True
 CORS_ORIGIN_ALLOW_ALL = False
 
 
-CORS_ORIGIN_WHITELIST = (
-    "http://localhost:7000",
-)
+CORS_ORIGIN_WHITELIST = ("http://127.0.0.1:7000",)
 
 CSRF_TRUSTED_ORIGINS = [
     "http://change.allowed.com",
     "http://django-oauth-toolkit.herokuapp.com/consumer/exchange/",
+    "http://127.0.0.1:7000/noexist/callback",
 ]
 
 CORS_ALLOW_METHODS = [
@@ -172,14 +194,3 @@ STATIC_URL = "static/"
 STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
 MEDIA_URL = "media/"
 MEDIA_ROOT = BASE_DIR / "media"
-
-OAUTH2_PROVIDER = {
-    # this is the list of available scopes
-    "SCOPES": {
-        "read": "Read scope",
-        "write": "Write scope",
-        "groups": "Access to your groups",
-    }
-}
-
-# PKCE_REQUIRED = False

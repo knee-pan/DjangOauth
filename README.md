@@ -61,14 +61,13 @@ code_verifier = base64.urlsafe_b64encode(code_verifier.encode('utf-8'))
 
 code_challenge = hashlib.sha256(code_verifier).digest()
 code_challenge = base64.urlsafe_b64encode(code_challenge).decode('utf-8').replace('=', '')
-
 ```
 
 * save the code_challenge : FvWWc5XFqUCJkf2KCGLLaynkhcpj2mVSQXzIP1-4oxk
 * code_verifier output : b'ODRYTjlSMzZHWFg2MkhNM1ROSEYxSU5GRkpNNTJDUElTQllQVFNCQjhWUlhQSzdYTTVTSTAyVEpZQTZESFdFRFk3TkdCWVNNWlpVWDVLVEdCOVI5RjBMN1A2UFg5TVpISDRUMDdYUDE2RjUzUllRT1hRN1NDQUVEMEw='
 * save as the code_verifier like this : ODRYTjlSMzZHWFg2MkhNM1ROSEYxSU5GRkpNNTJDUElTQllQVFNCQjhWUlhQSzdYTTVTSTAyVEpZQTZESFdFRFk3TkdCWVNNWlpVWDVLVEdCOVI5RjBMN1A2UFg5TVpISDRUMDdYUDE2RjUzUllRT1hRN1NDQUVEMEw=
 
-* http://127.0.0.1:7000/o/authorize/?response_type=code&code_challenge=FvWWc5XFqUCJkf2KCGLLaynkhcpj2mVSQXzIP1-4oxk&client_id=DVfYFIoj8bYJUd2lKeEKVNuvbctKxEWt7xGVa3Tq&redirect_uri=http://127.0.0.1:7000/noexist/callback
+* http://127.0.0.1:7000/o/authorize/?response_type=code&code_challenge=FvWWc5XFqUCJkf2KCGLLaynkhcpj2mVSQXzIP1-4oxk&client_id=DVfYFIoj8bYJUd2lKeEKVNuvbctKxEWt7xGVa3Tq&redirect_uri=http://django-oauth-toolkit.herokuapp.com/consumer/exchange/
 
 * Bu, uygulamanızı tanımlar, kullanıcıdan kaynaklarına erişmesi için uygulamanızı yetkilendirmesi istenir.
 Note the parameters we pass:
@@ -76,14 +75,18 @@ Note the parameters we pass:
 * response_type: code
 * code_challenge: FvWWc5XFqUCJkf2KCGLLaynkhcpj2mVSQXzIP1-4oxk
 * client_id: vW1RcAl7Mb0d5gyHNQIAcH110lWoOW2BmWJIero8
-* redirect_uri: http://127.0.0.1:7000/noexist/callback
+* redirect_uri: http://django-oauth-toolkit.herokuapp.com/consumer/exchange/
 
 
-* http://127.0.0.1:7000/noexist/callback'i redirect_uri olarak kullandığımızı unutmayın, bir Sayfa bulunamadı (404) alacaksınız, ancak aşağıdaki gibi bir url alırsanız işe yaradı:
+* http://django-oauth-toolkit.herokuapp.com/consumer/exchange/'i redirect_uri olarak kullandığımızı unutmayın, bir Sayfa bulunamadı (404) alacaksınız, ancak aşağıdaki gibi bir url alırsanız işe yaradı:
 
 * "GET /noexist/callback?code=QCo4MxPjwAiO8dn8L7w2WZjO426Z3n HTTP/1.1" 404 2389
 
 * Bu, size bir kod vermeye çalışan OAuth2 sağlayıcısıdır. bu durumda export CODE=QCo4MxPjwAiO8dn8L7w2WZjO426Z3n
+
+# ya da
+
+* http://django-oauth-toolkit.herokuapp.com/consumer/exchange/?code=WwBJqUuCovGQlQMJK49M76nIOl6W3K olarak dönerken code : WwBJqUuCovGQlQMJK49M76nIOl6W3K
 
 * Now that you have the user authorization is time to get an access token:
 
@@ -95,7 +98,7 @@ Note the parameters we pass:
     -d "client_secret=${SECRET}" \
     -d "code=${CODE}" \
     -d "code_verifier=${CODE_VERIFIER}" \
-    -d "redirect_uri=http://127.0.0.1:7000/noexist/callback" \
+    -d "redirect_uri=http://django-oauth-toolkit.herokuapp.com/consumer/exchange/" \
     -d "grant_type=authorization_code" 
     ```
 
@@ -229,4 +232,19 @@ CSRF_TRUSTED_ORIGINS = [
     "http://django-oauth-toolkit.herokuapp.com/consumer/exchange/",
 ]
 ```
+
+* http://127.0.0.1:7000/o/applications/register/
+
+* clientId : DVfYFIoj8bYJUd2lKeEKVNuvbctKxEWt7xGVa3Tq
+* clientSecret : pbkdf2_sha256$260000$pqjMtV3Uq6mDOxvvZGsZmE$WjliiFCsXHapmqgSA6v6gEnDoXxaBZHYb2LLBBirDks=
+
+* http://127.0.0.1:7000/o/authorize/?response_type=code&code_challenge=FvWWc5XFqUCJkf2KCGLLaynkhcpj2mVSQXzIP1-4oxk&client_id=DVfYFIoj8bYJUd2lKeEKVNuvbctKxEWt7xGVa3Tq&redirect_uri=http://django-oauth-toolkit.herokuapp.com/consumer/exchange/
+
+Dönen kod :-> http://django-oauth-toolkit.herokuapp.com/consumer/exchange/?code=WwBJqUuCovGQlQMJK49M76nIOl6W3K
+
+curl -X POST -H "Cache-Control: no-cache" -H "Content-Type: application/x-www-form-urlencoded" "http://127.0.0.1:7000/o/token/" -d "client_id=${ID}" -d "client_secret=${SECRET}" -d "code=${CODE}" -d "redirect_uri=http://django-oauth-toolkit.herokuapp.com/consumer/exchange/" -d "grant_type=authorization_code"
+
+
+**** test your oauth2 provider (sample consumer) : http://django-oauth-toolkit.herokuapp.com/consumer/
+**** http://django-oauth-toolkit.herokuapp.com/consumer/exchange/?state=random_state_string&response_type=code&client_id=DVfYFIoj8bYJUd2lKeEKVNuvbctKxEWt7xGVa3Tq
 

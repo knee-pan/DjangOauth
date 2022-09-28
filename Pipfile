@@ -13,6 +13,7 @@ flake8 = "*"
 lint = "*"
 django-oauth-login = "*"
 django-oauth-toolkit = "*"
+tox = "*"
 
 [dev-packages]
 black = "*"

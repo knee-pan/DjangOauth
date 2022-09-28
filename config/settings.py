@@ -62,7 +62,13 @@ MIDDLEWARE = [
 CORS_ALLOW_CREDENTIALS = True
 CORS_ORIGIN_ALLOW_ALL = False
 
-CORS_ORIGIN_WHITELIST = ("http://localhost:7000",)
+
+CORS_ORIGIN_WHITELIST = (
+    "google.com",
+    "localhost:8000",
+    "127.0.0.1:9000",
+    "http://localhost:7000",
+)
 
 CSRF_TRUSTED_ORIGINS = [
     "http://change.allowed.com",

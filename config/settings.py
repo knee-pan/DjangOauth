@@ -56,10 +56,38 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "corsheaders.middleware.CorsMiddleware",
-    'django.middleware.common.CommonMiddleware',
+    "django.middleware.common.CommonMiddleware",
+    "corsheaders.middleware.CorsPostCsrfMiddleware",
+]
+CORS_ALLOW_CREDENTIALS = True
+CORS_ORIGIN_ALLOW_ALL = False
+
+CORS_ORIGIN_WHITELIST = ("http://localhost:7000",)
+
+CSRF_TRUSTED_ORIGINS = [
+    "http://change.allowed.com",
 ]
 
-CORS_ORIGIN_ALLOW_ALL = True
+CORS_ALLOW_METHODS = [
+    "DELETE",
+    "GET",
+    "OPTIONS",
+    "PATCH",
+    "POST",
+    "PUT",
+]
+
+CORS_ALLOW_HEADERS = [
+    "accept",
+    "accept-encoding",
+    "authorization",
+    "content-type",
+    "dnt",
+    "origin",
+    "user-agent",
+    "x-csrftoken",
+    "x-requested-with",
+]
 
 ROOT_URLCONF = "config.urls"
 
@@ -150,4 +178,4 @@ OAUTH2_PROVIDER = {
     }
 }
 
-PKCE_REQUIRED = False
+# PKCE_REQUIRED = False

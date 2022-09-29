@@ -13,10 +13,11 @@ from ..models import MachineType, Profile
 from .serializer import MachineTypeSerializer, ProfileSerializer
 
 # redis-cli monitor :If you have configured everything corretly the terminal should output "GET" and "SET" requests when visiting pages that are included in the ModelViewSet along the following lines..
+# @method_decorator(vary_on_cookie)
+# @method_decorator(cache_page(settings.CACHE_TTL))
 
 
-@method_decorator(vary_on_cookie)
-@method_decorator(cache_page(settings.CACHE_TTL))
+@method_decorator([vary_on_cookie, cache_page(settings.CACHE_TTL)], name="dispatch")
 class MachineTypeListCreateAPI(ListCreateAPIView):
     serializer_class = MachineTypeSerializer
     queryset = MachineType.objects.all()

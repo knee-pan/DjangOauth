@@ -17,6 +17,7 @@ tox = "*"
 django-redis-cache = "*"
 django-rest-swagger = "*"
 django-redis = "*"
+drf-yasg = "*"
 
 [dev-packages]
 black = "*"

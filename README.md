@@ -5,7 +5,7 @@ Django Oauth Sample
 * django-admin startapp account
 * pipenv install django-oauth-toolkit
 
-```shell
+```
 INSTALLED_APPS = [
     ...
     "account",
@@ -20,13 +20,13 @@ urlpatterns = [
 ```
 * Yeni bir projeye başlıyorsanız, varsayılan Users modeli sizin için yeterli olsa bile özel bir Users modeli kurmanız önemle tavsiye edilir.
 * Bu model, varsayılan user modeliyle aynı şekilde davranır, ancak ihtiyaç duyulursa gelecekte bunu özelleştirebileceksiniz. 
-```shell
+```
 from django.contrib.auth.models import AbstractUser
 
 class User(AbstractUser):
     pass
 ```
-* settings.py'da hangi user modelinin kullanılacağını belirtmek gerek : ```shell AUTH_USER_MODEL='account.User'```
+* settings.py'da hangi user modelinin kullanılacağını belirtmek gerek : ``` AUTH_USER_MODEL='account.User'```
 
 * ```shell python manage.py makemigrations, migrate ```
 
@@ -44,13 +44,13 @@ class User(AbstractUser):
 
 * {name: web-app, 'clientId': --- 'clientSecret': ----, clientType: confidential, AuthType: Authorization code, redirect uris: localhost/noexist/call}
 
-* ```shell export ID=clientID, export SECRET=clientSecret ```
+* ``` export ID=clientID, export SECRET=clientSecret ```
 
 * Now let’s generate an authentication code grant with PKCE (Proof Key for Code Exchange), useful to prevent authorization code injection. 
 
 * To do so, you must first generate a code_verifier random string between 43 and 128 characters, which is then encoded to produce a code_challenge:
 
-```shell
+```
 import random
 import string
 import base64
@@ -90,7 +90,7 @@ Note the parameters we pass:
 
 * Now that you have the user authorization is time to get an access token:
 
-```shell curl -X POST \
+```curl -X POST \
     -H "Cache-Control: no-cache" \
     -H "Content-Type: application/x-www-form-urlencoded" \
     "http://127.0.0.1:7000/o/token/" \
@@ -103,7 +103,7 @@ Note the parameters we pass:
     ```
 
 * dönen değer:
-```shell
+```
 {
   "access_token": "jooqrnOrNa0BrNWlg68u9sl6SkdFZg",
   "expires_in": 36000,
@@ -113,7 +113,7 @@ Note the parameters we pass:
 }
 ```
 * To access the user resources we just use the access_token:
-```shell
+```
 curl \
     -H "Authorization: Bearer jooqrnOrNa0BrNWlg68u9sl6SkdFZg" \
     -X GET http://localhost:8000/resource
@@ -126,7 +126,7 @@ curl \
 
 * http://127.0.0.1:7000/o/applications/register/
 * credential seç ve redirect uris yazma
-```shell
+```
 import base64
 client_id = "IYEyUyqwx142atdCvkOLfMJLJxYxaoqCEih6a5kA"
 secret = "pbkdf2_sha256$260000$OEa9fgO8QBMmscqtWv4aAq$PzE4lGe8V1SixoEdyX5v4Pvrk4V+sjo7rK0kr6bpI2I="
@@ -152,7 +152,7 @@ curl -X POST \
 
 * CORS'un nasıl çalıştığını göstermek için, domain.com'da yaşayan bir web uygulamanız olduğunu varsayalım. Ancak uygulama, kullanıcı bilgilerini kaydetmek için başka bir URL'de barındırılan bir API'yi çağırır; örneğin, api.domain.com. ( örn google ile giriş) Bu nedenle, api.domain.com'a veri kaydetme isteği gönderildiğinde, sunucu istekleri başlıklarına ve isteğin kaynağına göre değerlendirir. Sunucuda domain.com URL'sine izin verirseniz, uygun yanıtı sağlayacaktır. Etki alanına izin verilmiyorsa, sunucu bir hata verir. Bu bilgi alışverişi, HTTP başlıkları kullanılarak gerçekleşir.
 
-```shell
+```
 
 MIDDLEWARE = [
     ...
@@ -196,7 +196,7 @@ CORS_ALLOW_HEADERS = [
 ]
 ```
 * Yukarıdaki yapılandırmadan fazlasını gerektiren bir kullanım durumunuz varsa, belirli bir isteğe izin verilip verilmeyeceğini kontrol etmek için kod ekleyebilirsiniz.
-```shell
+```
 from corsheaders.signals import check_request_enabled
 
 from .models import ModelName
@@ -210,7 +210,7 @@ check_request_enabled.connect(cors_allow_mymodel)
 
 ```
 * apps.py : 
-```shell
+```
 class AccountConfig(AppConfig):
     default_auto_field = "django.db.models.BigAutoField"
     name = "account"
@@ -226,7 +226,7 @@ class AccountConfig(AppConfig):
 * After that point your browser to http://localhost:8000/o/applications/ and add an Application instance.
 * Client id and Client Secret are automatically generated; you have to provide the rest of the informations.
 
-```shell
+```
 CSRF_TRUSTED_ORIGINS = [
     "http://change.allowed.com",
     "http://django-oauth-toolkit.herokuapp.com/consumer/exchange/",
@@ -250,19 +250,19 @@ curl -X POST -H "Cache-Control: no-cache" -H "Content-Type: application/x-www-fo
 
 # REDIS - Django Üzerinde Redis Cache
 
-* ```shell brew install redis / brew uninstall redis ```
-* ```shell brew list ```
+* ``` brew install redis / brew uninstall redis ```
+* ``` brew list ```
 
-* Başlangıçta redis açılsın istiyorsak: ```shell ln -sfv /usr/local/opt/redis/*.plist ~/Library/LaunchAgents ```
+* Başlangıçta redis açılsın istiyorsak: ``` ln -sfv /usr/local/opt/redis/*.plist ~/Library/LaunchAgents ```
 
-* Brew aracılığı ile Redis sunucumuzu başlatalım: ```shell brew services start redis ```
-* Konfigürasyon dosyası kullanarak Redis’i başlatmak:  ```shell redis-server /usr/local/etc/redis.conf ```
-* ```shell brew services stop redis ```
-* ```shell redis config konumu : /usr/local/etc/redis.conf ```
-* ```shell redis paket detayı : brew info redis ```
-* ```shell redis çalışma test : redis-cli ping ```
-* ```shell pipenv install django-redis-cache  ```
-```shell
+* Brew aracılığı ile Redis sunucumuzu başlatalım: ``` brew services start redis ```
+* Konfigürasyon dosyası kullanarak Redis’i başlatmak:  ``` redis-server /usr/local/etc/redis.conf ```
+* ``` brew services stop redis ```
+* ``` redis config konumu : /usr/local/etc/redis.conf ```
+* ``` redis paket detayı : brew info redis ```
+* ``` redis çalışma test : redis-cli ping ```
+* ``` pipenv install django-redis-cache  ```
+```
 
 CACHES = {
 "default": {
@@ -276,16 +276,16 @@ CACHES = {
 
 ```
 
-```shell 
+``` 
 redis-cli
 ```
 
-```shell 
+``` 
 redis-cli client list
 ```
 
 ### Note : If you haven't installed 'drf_yasg', swagger will not work. 
 
-```shell 
+``` 
 https://www.jasonmars.org/2020/04/22/add-swagger-to-django-rest-api-quickly-4-mins-without-hiccups/
 ```

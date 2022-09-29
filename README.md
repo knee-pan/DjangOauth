@@ -250,15 +250,37 @@ curl -X POST -H "Cache-Control: no-cache" -H "Content-Type: application/x-www-fo
 
 # REDIS - Django Üzerinde Redis Cache
 
-* brew install redis / brew uninstall redis
-* brew list
+* ```shell brew install redis / brew uninstall redis ```
+* ```shell brew list ```
 
-* Başlangıçta redis açılsın istiyorsak: ln -sfv /usr/local/opt/redis/*.plist ~/Library/LaunchAgents
+* Başlangıçta redis açılsın istiyorsak: ```shell ln -sfv /usr/local/opt/redis/*.plist ~/Library/LaunchAgents ```
 
-* Brew aracılığı ile Redis sunucumuzu başlatalım: brew services start redis
-* Konfigürasyon dosyası kullanarak Redis’i başlatmak:  redis-server /usr/local/etc/redis.conf
-* $ brew services stop redis
-* redis config konumu : /usr/local/etc/redis.conf
-* redis paket detayı : brew info redis
-* redis çalışma test : redis-cli ping
+* Brew aracılığı ile Redis sunucumuzu başlatalım: ```shell brew services start redis ```
+* Konfigürasyon dosyası kullanarak Redis’i başlatmak:  ```shell redis-server /usr/local/etc/redis.conf ```
+* ```shell brew services stop redis ```
+* ```shell redis config konumu : /usr/local/etc/redis.conf ```
+* ```shell redis paket detayı : brew info redis ```
+* ```shell redis çalışma test : redis-cli ping ```
+* ```shell pipenv install django-redis-cache  ```
+```shell
+
+CACHES = {
+"default": {
+    "BACKEND": "django_redis.cache.RedisCache",
+    "LOCATION": "redis://127.0.0.1:6379",
+    "OPTIONS": {
+        "CLIENT_CLASS": "django_redis.client.DefaultClient",
+    }
+  }
+}
+
+```
+
+```shell 
+redis-cli
+```
+
+```shell 
+redis-cli client list
+```
 

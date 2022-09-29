@@ -42,14 +42,15 @@ INSTALLED_APPS = [
     "account",
     "oauth2_provider",
     "corsheaders",
+    "machine",
 ]
 
 AUTH_USER_MODEL = "account.User"
 LOGIN_URL = "/admin/login/"
 
-AUTHENTICATION_BACKENDS = [
-    "oauth2_provider.backends.OAuth2Backend",
-]
+# AUTHENTICATION_BACKENDS = [
+#     "oauth2_provider.backends.OAuth2Backend",
+# ]
 
 # checks tokens
 MIDDLEWARE = [
@@ -153,6 +154,21 @@ DATABASES = {
     }
 }
 
+REDIS_HOST = "localhost"
+REDIS_PORT = 6379
+# In this, we are taking the default client configurations and have set default cache ttl ( Time to live) = “60 * 1500”.
+CACHE_TTL = 60 * 1500
+
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://127.0.0.1:6379/1",
+        "OPTIONS": {"CLIENT_CLASS": "django_redis.client.DefaultClient"},
+        "KEY_PREFIX": "example",
+    }
+}
+SESSION_ENGINE = "django.contrib.sessions.backends.cache"
+SESSION_CACHE_ALIAS = "default"
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators

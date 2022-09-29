@@ -248,3 +248,17 @@ curl -X POST -H "Cache-Control: no-cache" -H "Content-Type: application/x-www-fo
 **** test your oauth2 provider (sample consumer) : http://django-oauth-toolkit.herokuapp.com/consumer/
 **** http://django-oauth-toolkit.herokuapp.com/consumer/exchange/?state=random_state_string&response_type=code&client_id=DVfYFIoj8bYJUd2lKeEKVNuvbctKxEWt7xGVa3Tq
 
+# REDIS - Django Üzerinde Redis Cache
+
+* brew install redis / brew uninstall redis
+* brew list
+
+* Başlangıçta redis açılsın istiyorsak: ln -sfv /usr/local/opt/redis/*.plist ~/Library/LaunchAgents
+
+* Brew aracılığı ile Redis sunucumuzu başlatalım: brew services start redis
+* Konfigürasyon dosyası kullanarak Redis’i başlatmak:  redis-server /usr/local/etc/redis.conf
+* $ brew services stop redis
+* redis config konumu : /usr/local/etc/redis.conf
+* redis paket detayı : brew info redis
+* redis çalışma test : redis-cli ping
+

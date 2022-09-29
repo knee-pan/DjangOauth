@@ -1,14 +1,10 @@
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import cache_page
-from django.views.decorators.vary import vary_on_cookie, vary_on_headers
-from rest_framework.generics import (
-    CreateAPIView,
-    ListAPIView,
-    ListCreateAPIView,
-    get_object_or_404,
-)
+from django.views.decorators.vary import vary_on_cookie
+from rest_framework.generics import CreateAPIView, ListAPIView, ListCreateAPIView
 
-from ...config import settings
+from config import settings
+
 from ..models import MachineType, Profile
 from .serializer import MachineTypeSerializer, ProfileSerializer
 

@@ -43,7 +43,10 @@ INSTALLED_APPS = [
     "oauth2_provider",
     "corsheaders",
     "machine",
+    "rest_framework_swagger",
 ]
+
+REST_FRAMEWORK = {"DEFAULT_SCHEMA_CLASS": "rest_framework.schemas.coreapi.AutoSchema"}
 
 AUTH_USER_MODEL = "account.User"
 LOGIN_URL = "/admin/login/"

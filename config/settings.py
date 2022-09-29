@@ -44,7 +44,7 @@ INSTALLED_APPS = [
     "corsheaders",
     "machine",
     "rest_framework_swagger",
-    'drf_yasg',
+    "drf_yasg",
 ]
 
 REST_FRAMEWORK = {"DEFAULT_SCHEMA_CLASS": "rest_framework.schemas.coreapi.AutoSchema"}

@@ -29,11 +29,11 @@ from rest_framework import permissions
 
 schema_view = get_schema_view(
     openapi.Info(
-        title="Jaseci API",
+        title="Swagger UI for API",
         default_version="v1",
-        description="Welcome to the world of Jaseci",
-        terms_of_service="https://www.jaseci.org",
-        contact=openapi.Contact(email="jason@jaseci.org"),
+        description="API UI",
+        terms_of_service="http://127.0.0.1:7000/doc/",
+        contact=openapi.Contact(email="ayse"),
         license=openapi.License(name="Awesome IP"),
     ),
     public=True,

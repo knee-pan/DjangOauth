@@ -143,7 +143,7 @@ curl -X POST \
     -d "grant_type=client_credentials"
 
 
-# {"error": "invalid_client"}%
+* {"error": "invalid_client"}%
  ```
 
 # CORS

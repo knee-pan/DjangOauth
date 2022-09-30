@@ -20,5 +20,5 @@ def dashboard(request, *args, **kwargs):
 
 class UserCreate(CreateAPIView):
     serializer_class = UserSerializer
-    throttle_classes = RegisterThrottle
+    throttle_classes = [RegisterThrottle]
     queryset = User.objects.all()

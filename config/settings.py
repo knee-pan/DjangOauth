@@ -47,7 +47,18 @@ INSTALLED_APPS = [
     "drf_yasg",
 ]
 
-REST_FRAMEWORK = {"DEFAULT_SCHEMA_CLASS": "rest_framework.schemas.coreapi.AutoSchema"}
+
+REST_FRAMEWORK = {
+    "DEFAULT_SCHEMA_CLASS": "rest_framework.schemas.coreapi.AutoSchema",
+    "DEFAULT_THROTTLE_CLASSES": [
+        "rest_framework.throttling.AnonRateThrottle",
+        "rest_framework.throttling.UserRateThrottle",
+    ],
+    "DEFAULT_THROTTLE_RATES": {
+        "registerThrottle": "5/hour",
+        # "user": "1000/day"
+    },
+}
 
 AUTH_USER_MODEL = "account.User"
 LOGIN_URL = "/admin/login/"

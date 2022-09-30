@@ -274,16 +274,13 @@ CACHES = {
   }
 }
 
+
+```
+
 redis-cli
 
-
-``` 
 redis-cli client list
-```
-
 ### Note : If you haven't installed 'drf_yasg', swagger will not work. 
 
-``` 
-```
 https://www.jasonmars.org/2020/04/22/add-swagger-to-django-rest-api-quickly-4-mins-without-hiccups/
-```
+

@@ -274,11 +274,8 @@ CACHES = {
   }
 }
 
-```
-
-``` 
 redis-cli
-```
+
 
 ``` 
 redis-cli client list

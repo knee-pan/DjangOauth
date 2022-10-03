@@ -56,6 +56,8 @@ REST_FRAMEWORK = {
     ],
     "DEFAULT_THROTTLE_RATES": {
         "registerThrottle": "5/hour",
+        "anon": "100/day",
+        "user": "1000/day"
         # "user": "1000/day"
     },
     "DEFAULT_PERMISSION_CLASSES": [
@@ -109,7 +111,7 @@ OAUTH2_PROVIDER = {
 }
 
 CORS_ALLOW_CREDENTIALS = True
-CORS_ORIGIN_ALLOW_ALL = False
+CORS_ORIGIN_ALLOW_ALL = True
 
 
 CORS_ORIGIN_WHITELIST = ("http://127.0.0.1:7000",)

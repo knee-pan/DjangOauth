@@ -1,11 +1,12 @@
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
-from models import User
 from oauth2_provider.views.generic import ProtectedResourceView
-from permissions import IsAdminOrReadOnly
 from rest_framework.generics import CreateAPIView, ListAPIView
-from serializer import UserSerializer
-from throttles import RegisterThrottle
+
+from ..models import User
+from .permissions import IsAdminOrReadOnly
+from .serializer import UserSerializer
+from .throttles import RegisterThrottle
 
 
 # 403
@@ -23,10 +24,15 @@ class UserList(ListAPIView):
     serializer_class = UserSerializer
     queryset = User.objects.all()
     permission_classes = [IsAdminOrReadOnly]
+    throttle_classes = [
+        RegisterThrottle,
+    ]
 
 
 class UserCreate(CreateAPIView):
     serializer_class = UserSerializer
-    throttle_classes = [RegisterThrottle]
     queryset = User.objects.all()
     permission_classes = [IsAdminOrReadOnly]
+    throttle_classes = [
+        RegisterThrottle,
+    ]

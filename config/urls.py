@@ -46,19 +46,9 @@ urlpatterns = [
     path("", include("account.api.urls", namespace="acc_api")),
     path("machine/", include("machine.api.urls")),
     # url("swg", schema_view1),
-    re_path(
-        r"^doc(?P<format>\.json|\.yaml)$",
-        schema_view.without_ui(cache_timeout=0),
-        name="schema-json",
-    ),  # <-- Here
-    path(
-        "doc/",
-        schema_view.with_ui("swagger", cache_timeout=0),
-        name="schema-swagger-ui",
-    ),  # <-- Here
-    path(
-        "redoc/", schema_view.with_ui("redoc", cache_timeout=0), name="schema-redoc"
-    ),  # <-- Here
+    re_path(r"^doc(?P<format>\.json|\.yaml)$",schema_view.without_ui(cache_timeout=0),name="schema-json",),  # <-- Here
+    path("doc/",schema_view.with_ui("swagger", cache_timeout=0),name="schema-swagger-ui",),  # <-- Here
+    path("redoc/", schema_view.with_ui("redoc", cache_timeout=0), name="schema-redoc"),  # <-- Here
     path("api-auth/", include("rest_framework.urls")),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

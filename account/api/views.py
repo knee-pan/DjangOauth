@@ -3,11 +3,11 @@ from django.http import HttpResponse
 from oauth2_provider.views.generic import ProtectedResourceView
 from rest_framework.generics import CreateAPIView, ListAPIView
 
-from ..models import User
+#from ..models import User
 from .permissions import IsAdminOrReadOnly
 from .serializer import UserSerializer
 from .throttles import RegisterThrottle
-
+from account import models
 
 # 403
 class ApiEndpoint(ProtectedResourceView):
@@ -22,7 +22,7 @@ def dashboard(request, *args, **kwargs):
 
 class UserList(ListAPIView):
     serializer_class = UserSerializer
-    queryset = User.objects.all()
+    queryset = models.User.objects.all()
     permission_classes = [IsAdminOrReadOnly]
     throttle_classes = [
         RegisterThrottle,
@@ -31,7 +31,7 @@ class UserList(ListAPIView):
 
 class UserCreate(CreateAPIView):
     serializer_class = UserSerializer
-    queryset = User.objects.all()
+    queryset = models.User.objects.all()
     permission_classes = [IsAdminOrReadOnly]
     throttle_classes = [
         RegisterThrottle,

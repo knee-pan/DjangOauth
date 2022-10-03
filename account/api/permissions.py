@@ -12,7 +12,7 @@ class IsAdminOrReadOnly(permissions.IsAdminUser):
         return request.method in permissions.SAFE_METHODS or is_admin
 
 
-pprint(dir(IsAdminOrReadOnly)) # has_obj , has_obj_perm
+# pprint(dir(IsAdminOrReadOnly)) # has_obj , has_obj_perm
 # has_obj: her daim, has_obj_perm: tetiklendiğinde çalışır
 
 

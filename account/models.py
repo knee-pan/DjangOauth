@@ -17,3 +17,7 @@ class User(AbstractUser):
     last_name = models.CharField(
         _("last name"), max_length=150, blank=False, null=False
     )
+
+    class Meta:
+        verbose_name = _('user')
+        verbose_name_plural = _('users')

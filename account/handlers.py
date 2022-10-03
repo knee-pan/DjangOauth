@@ -1,6 +1,6 @@
-from corsheaders.signals import check_request_enabled
+# from corsheaders.signals import check_request_enabled
 
-from .models import User
+# from .models import User
 
 # def cors_allow_myuser(sender, request, **kwargs):
 #     return User.objects.filter(host=request.host).exists()

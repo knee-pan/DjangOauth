@@ -3,12 +3,15 @@ from django.views.decorators.cache import cache_page
 from django.views.decorators.vary import vary_on_cookie
 from rest_framework.generics import CreateAPIView, ListAPIView, ListCreateAPIView
 from rest_framework.permissions import SAFE_METHODS, BasePermission, IsAuthenticated
-from rest_framework.response import Response
 
 from config import settings
 
 from ..models import MachineType, Profile
+from .permissions import IsAdminOrReadOnly
 from .serializer import MachineTypeSerializer, ProfileSerializer
+
+# from rest_framework.response import Response
+
 
 # redis-cli monitor :If you have configured everything corretly the terminal should output "GET" and "SET" requests when visiting pages that are included in the ModelViewSet along the following lines..
 # @method_decorator(vary_on_cookie)
@@ -26,9 +29,9 @@ class MachineTypeListCreateAPI(ListCreateAPIView):
     queryset = MachineType.objects.all()
     permission_classes = [IsAuthenticated | ReadOnly]
 
-    def get(self, request, format=None):
-        content = {"status": "request was permitted"}
-        return Response(content)
+    # def get(self, request, format=None):
+    #     content = {"status": "request was permitted"}
+    #     return Response(content)
 
 
 class ProfileListAPI(ListAPIView):
@@ -44,6 +47,7 @@ class ProfileListAPI(ListAPIView):
 class ProfileCreateAPI(CreateAPIView):
     serializer_class = ProfileSerializer
     queryset = Profile.objects.all()
+    permission_classes = [IsAdminOrReadOnly]
 
     # def get_queryset(self):
     #     return Profile.objects.filter(user=self.request.user)

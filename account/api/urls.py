@@ -53,13 +53,10 @@ if settings.DEBUG:
     ]
 
 urlpatterns = [
-    # OAuth 2 endpoints:
-    # need to pass in a tuple of the endpoints as well as the app's name
-    # because the app_name attribute is not set in the included module
     path("o/",include((oauth2_endpoint_views, "oauth2_provider"), namespace="oauth2_provider"),),
     path("api/hello/", ApiEndpoint.as_view()),  # an example resource endpoint
     path("dashboard/", dashboard, name="dashboard"),  
     # curl -H "Authorization: Bearer DVfYFIoj8bYJUd2lKeEKVNuvbctKxEWt7xGVa3Tq" -X GET http://localhost:7000/dashboard
     path("list/",UserList.as_view()),
-    path("create/",UserCreate.as_view())
+    path("create/",UserCreate.as_view()),
 ]

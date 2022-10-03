@@ -2,6 +2,8 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.cache import cache_page
 from django.views.decorators.vary import vary_on_cookie
 from rest_framework.generics import CreateAPIView, ListAPIView, ListCreateAPIView
+from rest_framework.permissions import SAFE_METHODS, BasePermission, IsAuthenticated
+from rest_framework.response import Response
 
 from config import settings
 
@@ -13,10 +15,20 @@ from .serializer import MachineTypeSerializer, ProfileSerializer
 # @method_decorator(cache_page(settings.CACHE_TTL))
 
 
+class ReadOnly(BasePermission):
+    def has_permission(self, request, view):
+        return request.method in SAFE_METHODS
+
+
 @method_decorator([vary_on_cookie, cache_page(settings.CACHE_TTL)], name="dispatch")
 class MachineTypeListCreateAPI(ListCreateAPIView):
     serializer_class = MachineTypeSerializer
     queryset = MachineType.objects.all()
+    permission_classes = [IsAuthenticated | ReadOnly]
+
+    def get(self, request, format=None):
+        content = {"status": "request was permitted"}
+        return Response(content)
 
 
 class ProfileListAPI(ListAPIView):

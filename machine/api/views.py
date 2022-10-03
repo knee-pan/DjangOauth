@@ -45,5 +45,8 @@ class ProfileCreateAPI(CreateAPIView):
     serializer_class = ProfileSerializer
     queryset = Profile.objects.all()
 
+    # def get_queryset(self):
+    #     return Profile.objects.filter(user=self.request.user)
+
     def perform_create(self, serializer):
         return super().perform_create(serializer)

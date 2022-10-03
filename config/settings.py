@@ -58,6 +58,9 @@ REST_FRAMEWORK = {
         "registerThrottle": "5/hour",
         # "user": "1000/day"
     },
+    "DEFAULT_PERMISSION_CLASSES": [
+        "rest_framework.permissions.AllowAny",
+    ],
 }
 
 AUTH_USER_MODEL = "account.User"

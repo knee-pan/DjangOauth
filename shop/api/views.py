@@ -3,6 +3,7 @@ from datetime import timezone
 from rest_framework.generics import (
     CreateAPIView,
     ListAPIView,
+    RetrieveAPIView,
     RetrieveDestroyAPIView,
     RetrieveUpdateAPIView,
     get_object_or_404,
@@ -64,6 +65,12 @@ class ProductListAPI(ListAPIView):
 class ProductCreateAPI(CreateAPIView):
     serializer_class = ProductUpdateCreateSerializer
     queryset = Product.objects.all()
+
+
+class ProductDetailAPI(RetrieveAPIView):
+    serializer_class = ProductUpdateCreateSerializer
+    queryset = Product.objects.all()
+    lookup_field = "pk"
 
 
 class ProductUpdateAPI(RetrieveUpdateAPIView):

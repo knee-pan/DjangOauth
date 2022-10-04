@@ -1,23 +1,18 @@
-from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import User
 from django.db import models
-from django.utils.translation import gettext_lazy as _
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 # Create your models here.
 
 
-class User(AbstractUser):
-    is_staff = models.BooleanField(
-        _("staff status"),
-        default=False,
-        help_text=_("Designates whether the user can log into this admin site."),
-    )
-    first_name = models.CharField(
-        _("first name"), max_length=150, blank=False, null=False
-    )
-    last_name = models.CharField(
-        _("last name"), max_length=150, blank=False, null=False
-    )
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    note = models.CharField(max_length=120, null=True, blank=True)
 
-    class Meta:
-        verbose_name = _('user')
-        verbose_name_plural = _('users')
+    @receiver(post_save, sender=User)
+    def create_user_profile(sender, instance, created, **kwargs):
+        if created:
+            Profile.objects.create(user=instance)
+
+        instance.profile.save()

@@ -3,7 +3,7 @@ from rest_framework.throttling import SimpleRateThrottle
 
 class RegisterThrottle(SimpleRateThrottle):
     """
-    Kayıt isteği engelleme"""
+    Kayit isteği engelleme"""
 
     scope = "registerThrottle"
 
@@ -11,7 +11,7 @@ class RegisterThrottle(SimpleRateThrottle):
         if request.user and request.user.is_authenticated or request.method == 'GET':
             return None  # Only throttle unauthenticated requests.
         """
-        Kısıtlanmak istenen sayfaya POST işleminin yapılması
+        Kisitlanmak istenen sayfaya POST işleminin yapilmasi
         """
         return self.cache_format % {
             "scope": self.scope,

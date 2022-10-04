@@ -2,7 +2,7 @@ import oauth2_provider.views as oauth2_views
 from django.conf import settings
 from django.urls import include, path
 
-from .views import ApiEndpoint, dashboard, UserCreate, UserList
+from .views import ApiEndpoint, ProfileUpdateAPI, UserCreate, UserList, dashboard
 
 app_name = "acc_api"
 # OAuth2 provider endpoints
@@ -57,6 +57,7 @@ urlpatterns = [
     path("api/hello/", ApiEndpoint.as_view()),  # an example resource endpoint
     path("dashboard/", dashboard, name="dashboard"),  
     # curl -H "Authorization: Bearer DVfYFIoj8bYJUd2lKeEKVNuvbctKxEWt7xGVa3Tq" -X GET http://localhost:7000/dashboard
-    path("list/",UserList.as_view()),
-    path("create/",UserCreate.as_view()),
+    path("register/", UserCreate.as_view(), name="register"),
+    path("list/", UserList.as_view(), name="list"),
+    path("me/", ProfileUpdateAPI.as_view(), name="update"),
 ]

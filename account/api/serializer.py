@@ -1,11 +1,47 @@
-from rest_framework import routers, serializers, viewsets
+from django.contrib.auth.models import User
+from django.contrib.auth.password_validation import validate_password
+from rest_framework import serializers
 
-from ..models import User
+from ..models import Profile
+
+# from rest_framework.serializers import Serializer
+
+
+class ProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        ref_name = "profile"
+        model = Profile
+        fields = ["user", "note"]
 
 
 class UserSerializer(serializers.ModelSerializer):
-    id = serializers.IntegerField(read_only=True)
+    profile = ProfileSerializer()
 
     class Meta:
         model = User
-        fields = ["id", "is_staff", "first_name", "last_name"]
+        fields = ["id", "first_name", "last_name", "profile"]
+
+    def update(self, instance, validated_data):
+        profile = validated_data.pop("profile")
+        profile_seri = ProfileSerializer(instance.profile, data=profile)
+        profile_seri.is_valid(raise_exception=True)
+        profile_seri.save()
+        return super(UserSerializer, self).update(instance, validated_data)
+
+
+class UserCreateSerializer(serializers.ModelSerializer):
+    password = serializers.CharField(write_only=True)
+
+    class Meta:
+        model = User
+        fields = ["id", "username", "password"]  # is_staff
+
+        def validate(self, attr):  # indent
+            validate_password(attr["password"])
+            return attr
+
+        def create(self, validated_data):
+            user = User.objects.create(username=validated_data["username"])
+            user.set_password(validated_data["password"])
+            user.save()
+            return user

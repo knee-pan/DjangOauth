@@ -5,6 +5,10 @@ from shop.api.views import (
     CategoryDestroyAPI,
     CategoryListAPI,
     CategoryUpdateAPI,
+    ProductListAPI,
+    ProductCreateAPI,
+    ProductUpdateAPI,
+    ProductDestroyAPI,
 )
 
 app_name = "shop_api"
@@ -13,4 +17,9 @@ urlpatterns = [
     path("category/create", CategoryCreateAPI.as_view(), name="create"),
     path("category/update/<pk>", CategoryUpdateAPI.as_view(), name="update"),
     path("category/delete/<pk>", CategoryDestroyAPI.as_view(), name="destroy"),
+
+    path("prod/list/", ProductListAPI.as_view(), name="list"),
+    path("prod/create", ProductCreateAPI.as_view(), name="create"),
+    path("prod/update/<pk>", ProductUpdateAPI.as_view(), name="update"),
+    path("prod/delete/<pk>", ProductDestroyAPI.as_view(), name="destroy"),
 ]

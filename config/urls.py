@@ -31,8 +31,8 @@ schema_view = get_schema_view(
     openapi.Info(
         title="Swagger UI for API",
         default_version="v1",
-        # description="APIs UI",
-        # terms_of_service="http://127.0.0.1:7000/doc/",
+        description="APIs UI",
+        terms_of_service="http://127.0.0.1:7000/doc/",
         contact=openapi.Contact(email="ayse"),
         license=openapi.License(name="Awesome IP"),
     ),

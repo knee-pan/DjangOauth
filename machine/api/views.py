@@ -2,7 +2,7 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.cache import cache_page
 from django.views.decorators.vary import vary_on_cookie
 from rest_framework.generics import CreateAPIView, ListAPIView, ListCreateAPIView
-from rest_framework.permissions import SAFE_METHODS, BasePermission, IsAuthenticated
+from rest_framework.permissions import SAFE_METHODS, BasePermission
 
 from config import settings
 
@@ -27,7 +27,7 @@ class ReadOnly(BasePermission):
 class MachineTypeListCreateAPI(ListCreateAPIView):
     serializer_class = MachineTypeSerializer
     queryset = MachineType.objects.all()
-    permission_classes = [IsAuthenticated | ReadOnly]
+    # permission_classes = [IsAuthenticated | ReadOnly]
 
     # def get(self, request, format=None):
     #     content = {"status": "request was permitted"}

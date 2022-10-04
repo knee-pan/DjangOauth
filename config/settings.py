@@ -47,8 +47,21 @@ INSTALLED_APPS = [
     "drf_yasg",
 ]
 
+# OAUTH2 Settings
+# AUTH_USER_MODEL = "account.User"
+# LOGIN_URL = "/admin/login/"
+# LOGOUT_REDIRECT_URL = "/admin/logout/"
+# OAUTH2_PROVIDER_APPLICATION_MODEL = "oauth2_provider.Application"
+
+
+AUTHENTICATION_BACKENDS = (
+    "oauth2_provider.backends.OAuth2Backend",
+    "django.contrib.auth.backends.ModelBackend",
+)
+
 
 REST_FRAMEWORK = {
+    # "DEFAULT_AUTHENTICATION_CLASSES": "oauth2_provider.contrib.rest_framework.OAuth2Authentication",
     "DEFAULT_SCHEMA_CLASS": "rest_framework.schemas.coreapi.AutoSchema",
     "DEFAULT_THROTTLE_CLASSES": [
         "rest_framework.throttling.AnonRateThrottle",
@@ -61,16 +74,10 @@ REST_FRAMEWORK = {
         # "user": "1000/day"
     },
     "DEFAULT_PERMISSION_CLASSES": [
-        "rest_framework.permissions.AllowAny",
+        "rest_framework.permissions.IsAuthenticatedOrReadOnly",
     ],
 }
 
-AUTH_USER_MODEL = "account.User"
-LOGIN_URL = "/admin/login/"
-
-# AUTHENTICATION_BACKENDS = [
-#     "oauth2_provider.backends.OAuth2Backend",
-# ]
 
 # checks tokens
 MIDDLEWARE = [

@@ -1,5 +1,6 @@
 from datetime import timezone
 
+from django.http import JsonResponse
 from rest_framework.generics import (
     CreateAPIView,
     ListAPIView,
@@ -85,3 +86,11 @@ class ProductDestroyAPI(RetrieveDestroyAPIView):
 
     def get_queryset(self):
         return Product.objects.filter(is_active=False)
+
+
+# Verileri Cache hazırla.
+# urle ekle.
+class DashboardAPI(RetrieveAPIView):
+    def get(self, request, *args, **kwargs):
+        content = {}
+        return JsonResponse(content)

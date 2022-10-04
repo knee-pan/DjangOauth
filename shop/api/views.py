@@ -1,4 +1,5 @@
 from datetime import timezone
+
 from rest_framework.generics import (
     CreateAPIView,
     ListAPIView,
@@ -6,9 +7,14 @@ from rest_framework.generics import (
     RetrieveUpdateAPIView,
     get_object_or_404,
 )
-from shop.api.serializer import CategoryListSerializer,CategoryCreateUpdateSerializer
 
-from shop.models import Category,Product
+from shop.api.serializer import (
+    CategoryCreateUpdateSerializer,
+    CategoryListSerializer,
+    ProductListSerializer,
+    ProductUpdateCreateSerializer,
+)
+from shop.models import Category, Product
 
 
 class CategoryListAPI(ListAPIView):
@@ -45,4 +51,30 @@ class CategoryDestroyAPI(RetrieveDestroyAPIView):
     lookup_field = "pk"
 
     # def get_queryset(self):
-    #     return Category.objects.filter(is_active=False) 
+    #     return Category.objects.filter(is_active=False)
+
+
+class ProductListAPI(ListAPIView):
+    serializer_class = ProductListSerializer
+
+    def get_queryset(self):
+        return Product.objects.filter(is_active=True)
+
+
+class ProductCreateAPI(CreateAPIView):
+    serializer_class = ProductUpdateCreateSerializer
+    queryset = Product.objects.all()
+
+
+class ProductUpdateAPI(RetrieveUpdateAPIView):
+    serializer_class = ProductUpdateCreateSerializer
+    queryset = Product.objects.all()
+    lookup_field = "pk"
+
+
+class ProductDestroyAPI(RetrieveDestroyAPIView):
+    serializer_class = ProductListSerializer
+    lookup_field = "pk"
+
+    def get_queryset(self):
+        return Product.objects.filter(is_active=False)

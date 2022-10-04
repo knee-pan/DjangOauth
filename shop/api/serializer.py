@@ -1,18 +1,19 @@
 from datetime import timezone
 
-from models import Category, Product
 from rest_framework import serializers
+
+from shop.models import Category, Product
 
 
 class CategoryListSerializer(serializers.ModelSerializer):
     class Meta:
-        models = Category
+        model = Category
         fields = "__all__"
 
 
 class CategoryCreateUpdateSerializer(serializers.ModelSerializer):
     class Meta:
-        models = Category
+        model = Category
         fields = "__all__"
 
 

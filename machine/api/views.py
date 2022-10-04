@@ -52,5 +52,8 @@ class ProfileCreateAPI(CreateAPIView):
     # def get_queryset(self):
     #     return Profile.objects.filter(user=self.request.user)
 
-    def perform_create(self, serializer):
-        return super().perform_create(serializer)
+    # def perform_create(self, serializer):
+    #     serializer.save(user=self.request.user)
+
+
+# class ProfileCreateAPI -> acc appinde de mevcut ismi değiş

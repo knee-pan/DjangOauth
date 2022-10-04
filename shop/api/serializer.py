@@ -1,5 +1,3 @@
-from datetime import timezone
-
 from rest_framework import serializers
 
 from shop.models import Category, Product
@@ -37,12 +35,18 @@ class ProductUpdateCreateSerializer(serializers.ModelSerializer):
         read_only_fields = ["id", "created", "updated"]
 
     def create(self, validated_data):
-        return Product.objects.create(**validated_data).save()
+        return Product.objects.create(**validated_data)
         # Product.objects.create(user=self.context['request'].user,**validated_data)
 
     # sadece updateApiView ile çalışır, pk ile gidin
     def update(self, instance, validated_data):
+        instance.name = validated_data.get("name", instance.name)
+        instance.category = validated_data.get("category", instance.category)
+        instance.price = validated_data.get("price", instance.price)
+        instance.is_active = validated_data.get("is_active", instance.is_active)
+        instance.created = validated_data.get("created", instance.created)
         instance.updated = validated_data.get("updated", instance.updated)
+        print(validated_data)
         instance.save()
         return instance
 

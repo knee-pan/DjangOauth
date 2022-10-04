@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     "machine",
     "rest_framework_swagger",
     "drf_yasg",
+    "shop",
 ]
 
 # OAUTH2 Settings

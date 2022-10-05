@@ -18,6 +18,7 @@ django-redis-cache = "*"
 django-rest-swagger = "*"
 django-redis = "*"
 drf-yasg = "*"
+django-debug-toolbar = "*"
 
 [dev-packages]
 black = "*"

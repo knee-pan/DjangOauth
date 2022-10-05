@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     "rest_framework_swagger",
     "drf_yasg",
     "shop",
+    "debug_toolbar",
 ]
 
 # OAUTH2 Settings
@@ -93,6 +94,7 @@ MIDDLEWARE = [
     "django.middleware.common.CommonMiddleware",
     "corsheaders.middleware.CorsPostCsrfMiddleware",
     "oauth2_provider.middleware.OAuth2TokenMiddleware",
+    "debug_toolbar.middleware.DebugToolbarMiddleware",
 ]
 
 
@@ -195,6 +197,7 @@ CACHES = {
         "KEY_PREFIX": "example",
     }
 }
+# Session rediste tutulmalı, devamlı değil anlık kaydedilmeli.
 SESSION_ENGINE = "django.contrib.sessions.backends.cache"
 SESSION_CACHE_ALIAS = "default"
 

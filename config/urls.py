@@ -13,6 +13,7 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+import debug_toolbar
 from django.conf import settings
 from django.conf.urls import url
 from django.conf.urls.static import static
@@ -61,6 +62,7 @@ urlpatterns = [
     ),  # <-- Here
     path("api-auth/", include("rest_framework.urls")),
     path("shop/", include("shop.api.urls", namespace="shop_api")),
+    path("__debug__/", include(debug_toolbar.urls)),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 #  http://127.0.0.1:7000/o/applications/register/

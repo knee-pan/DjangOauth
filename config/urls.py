@@ -22,6 +22,7 @@ from django.urls import include, path, re_path
 from drf_yasg import openapi
 from drf_yasg.views import get_schema_view
 from rest_framework import permissions
+
 # from rest_framework_swagger.views import get_swagger_view
 
 # If you haven't installed 'drf_yasg', swagger will not work.
@@ -68,7 +69,24 @@ urlpatterns = [
 #  http://127.0.0.1:7000/o/applications/register/
 # clientId : x6OuNUjboMa9Jq78lObiFyYNjK7C3DpCcSimfRI9
 # clientSecret : BfZQUY6bwa9xTMG3ABCu8ZwBvTqdueuTaIh3QzHlqAlsh2AtTFJv00y4cDxONzz9Yrb5CcPjSOmYDWEXAbhBeS8HjdITddtgPIZdxLrd4G85nScI6JyvaKr8EYtktVB4
-# Silk'in veritabanı tablolarını oluşturmak için syncdb'yi çalıştırın: python manage.py syncdb
-# [silk]
-    # silk_clear_request_log
-    # silk_request_garbage_collect
+
+
+# Silk primarily consists of:
+
+# Middleware for intercepting Requests/Responses
+# A wrapper around SQL execution for profiling of database queries
+# A context manager/decorator for profiling blocks of code and functions either manually or dynamically.
+# A user interface for inspection and visualisation of the above.
+
+# [silk] python manage.py -
+# silk_clear_request_log
+# silk_request_garbage_collect
+
+# It records things like:
+
+# Time taken
+# Num. queries
+# Time spent on queries
+# Request/Response headers
+# Request/Response bodies
+# and so on.

@@ -274,3 +274,8 @@ MEDIA_ROOT = BASE_DIR / "media"
 
 SILKY_PYTHON_PROFILER = True
 SILKY_PYTHON_PROFILER_BINARY = True
+
+SILKY_STORAGE_CLASS = 'silk.storage.ProfilerResultStorage'
+
+# The default storage class is silk.storage.ProfilerResultStorage, and when using that you can specify a path of your choosing. You must ensure the specified directory exists.
+# If this is not set, MEDIA_ROOT will be used. -> SILKY_PYTHON_PROFILER_RESULT_PATH = '/path/to/profiles/'

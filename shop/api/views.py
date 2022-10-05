@@ -87,10 +87,3 @@ class ProductDestroyAPI(RetrieveDestroyAPIView):
     def get_queryset(self):
         return Product.objects.filter(is_active=False)
 
-
-# Verileri Cache hazırla.
-# urle ekle.
-class DashboardAPI(RetrieveAPIView):
-    def get(self, request, *args, **kwargs):
-        content = {}
-        return JsonResponse(content)

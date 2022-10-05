@@ -22,7 +22,6 @@ from django.urls import include, path, re_path
 from drf_yasg import openapi
 from drf_yasg.views import get_schema_view
 from rest_framework import permissions
-
 # from rest_framework_swagger.views import get_swagger_view
 
 # If you haven't installed 'drf_yasg', swagger will not work.
@@ -63,8 +62,13 @@ urlpatterns = [
     path("api-auth/", include("rest_framework.urls")),
     path("shop/", include("shop.api.urls", namespace="shop_api")),
     path("__debug__/", include(debug_toolbar.urls)),
+    path("api_profiler/", include("silk.urls", namespace="silk")),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 #  http://127.0.0.1:7000/o/applications/register/
 # clientId : x6OuNUjboMa9Jq78lObiFyYNjK7C3DpCcSimfRI9
 # clientSecret : BfZQUY6bwa9xTMG3ABCu8ZwBvTqdueuTaIh3QzHlqAlsh2AtTFJv00y4cDxONzz9Yrb5CcPjSOmYDWEXAbhBeS8HjdITddtgPIZdxLrd4G85nScI6JyvaKr8EYtktVB4
+# Silk'in veritabanı tablolarını oluşturmak için syncdb'yi çalıştırın: python manage.py syncdb
+# [silk]
+    # silk_clear_request_log
+    # silk_request_garbage_collect

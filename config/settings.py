@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     "drf_yasg",
     "shop",
     "debug_toolbar",
+    "silk",
 ]
 
 # OAUTH2 Settings
@@ -95,6 +96,7 @@ MIDDLEWARE = [
     "corsheaders.middleware.CorsPostCsrfMiddleware",
     "oauth2_provider.middleware.OAuth2TokenMiddleware",
     "debug_toolbar.middleware.DebugToolbarMiddleware",
+    "silk.middleware.SilkyMiddleware",
 ]
 
 
@@ -266,6 +268,9 @@ STATIC_URL = "/static/"
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static/"),
 ]
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 MEDIA_URL = "media/"
 MEDIA_ROOT = BASE_DIR / "media"
+
+SILKY_PYTHON_PROFILER = True
+SILKY_PYTHON_PROFILER_BINARY = True

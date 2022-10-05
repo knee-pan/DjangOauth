@@ -19,6 +19,7 @@ django-rest-swagger = "*"
 django-redis = "*"
 drf-yasg = "*"
 django-debug-toolbar = "*"
+django-silk = "*"
 
 [dev-packages]
 black = "*"

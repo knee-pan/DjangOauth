@@ -1,21 +1,23 @@
 from django.contrib import admin
 
-#from reversion.admin import VersionAdmin
-from machine.models import Machine, MachineType, Profile, Projector
+# from reversion.admin import VersionAdmin
+from machine.models import Machine, MachineType, Profile, Projector, PrintLog
 
 # Register your models here.
 
 
 admin.site.register(Profile)
 admin.site.register(Projector)
+admin.site.register(PrintLog)
 
 
 @admin.register(MachineType)
 class MachineTypeAdmin(admin.ModelAdmin):
     list_display = ["__str__", "general_width", "general_height"]
 
+
 @admin.register(Machine)
-class MachineAdmin(admin.ModelAdmin): #class MachineAdmin(VersionAdmin):
+class MachineAdmin(admin.ModelAdmin):  # class MachineAdmin(VersionAdmin):
     list_display = [
         "serial",
         "mac",
@@ -34,7 +36,8 @@ class MachineAdmin(admin.ModelAdmin): #class MachineAdmin(VersionAdmin):
     ]
     search_fields = [
         "serial",
-        "mac",]
+        "mac",
+    ]
 
     autocomplete_fields = ["owner"]
     ordering = ["serial"]

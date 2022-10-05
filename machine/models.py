@@ -1,4 +1,6 @@
 from datetime import timezone
+
+from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.core.validators import (
     MaxValueValidator,
@@ -7,7 +9,7 @@ from django.core.validators import (
     RegexValidator,
 )
 from django.db import models
-from django.contrib.auth.models import User
+
 # Create your models here.
 
 
@@ -320,16 +322,16 @@ class Machine(models.Model):
 
     serial = models.CharField(max_length=15,unique=True,validators=[MinLengthValidator(12),RegexValidator(r"^[\d]*$", message="Only digit"),],)
 
-    owner = models.ForeignKey(User,on_delete=models.SET_NULL,null=True,related_name="machines",limit_choices_to={"applications__name": "MegaPlatform"},)
+    owner = models.ForeignKey(User,on_delete=models.SET_NULL,null=True,related_name="machines",) # limit_choices_to={"applications__name": "MegaPlatform"}
     machine_type = models.ForeignKey(MachineType,on_delete=models.SET_NULL,null=True,blank=True,related_name="machines",)
     mac = models.CharField(max_length=12,unique=True,validators=[MinLengthValidator(12), RegexValidator(r"^[A-F0-9]*$")],)
 
     teamviewer_id = models.CharField(max_length=12,null=True,blank=True,validators=[MinLengthValidator(10),RegexValidator(r"^[\d]*$", message="Only digit"),],)
     teamviewer_version = models.CharField(max_length=10, null=True, blank=True)
 
-    profiles = models.ManyToManyField(Profile, related_name="machines", limit_choices_to={"confirmed": True})
+    profiles = models.ManyToManyField(Profile, related_name="machines")
 
-    unconfirmed_profiles = models.ManyToManyField(Profile, blank=True, limit_choices_to={"confirmed": False})
+    unconfirmed_profiles = models.ManyToManyField(Profile, blank=True) # , limit_choices_to={"confirmed": False}
 
 
     check_status = models.BooleanField(default=False,verbose_name="Check Status",help_text="! Machine will check status on every actions. Connection required.",)
@@ -390,3 +392,60 @@ class Machine(models.Model):
             if self.software_version != version:
                 self.software_version = version
                 self.save()
+
+
+
+class PrintLog(models.Model):
+    PRINT_STATUS = (
+        ("successful", "Successful"),
+        ("unsuccessful", "Unsuccessful"),
+        ("cancelled", "Cancelled"),
+        ("faulty", "Faulty"),
+    )
+
+    START_TYPE = (
+        ("normal", "NoHeating"),
+        ("quickstart", "Quickstart"),
+        ("overtime", "Overtime"),
+        ("overtemp", "Overtemp"),
+    )
+
+    id = models.BigAutoField(primary_key=True)
+    machine = models.ForeignKey(Machine, on_delete=models.CASCADE, related_name="print_logs")
+    user = models.ForeignKey(User, on_delete=models.DO_NOTHING)
+    ip = models.GenericIPAddressField(protocol="both", unpack_ipv4=True, blank=True, null=True)
+    model_name = models.CharField(max_length=100)
+    profile_name = models.CharField(max_length=50, null=True, blank=True)
+    software_version = models.CharField(max_length=10, null=True, blank=True)
+    layer_count = models.PositiveSmallIntegerField()
+    layer_thickness = models.PositiveIntegerField()
+    finished_layers = models.PositiveIntegerField()
+    print_status = models.CharField(max_length=12, choices=PRINT_STATUS, default="faulty")
+    start_type = models.CharField(max_length=10, choices=START_TYPE, default="normal", null=True, blank=True)
+    start_temp = models.FloatField(null=True, blank=True)
+    total_solid_area = models.FloatField()
+    exposure = models.FloatField()
+    print_start = models.DateTimeField()
+    print_real_start = models.DateTimeField(null=True, blank=True)
+    print_stop = models.DateTimeField(null=True, blank=True)
+    updated = models.DateTimeField(auto_now=True)
+    created = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name_plural = "Print Logs"
+
+    def __str__(self):
+        return str(self.id)
+
+    @property
+    def printing_time(self):
+        if self.print_stop:
+
+            print_start = (
+                self.print_real_start if self.print_real_start else self.print_start
+            )
+
+            print_time = self.print_stop - print_start
+
+            return int(print_time.seconds / 60)
+        return 0

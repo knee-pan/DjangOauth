@@ -3,7 +3,6 @@ from django.dispatch import receiver
 
 from .models import MachineType, Profile
 
-
 # @receiver(post_save, sender=Profile)
 # def profile_mType_save(sender, instance, **kwargs):
 #     instance.machine_type.add()
@@ -21,6 +20,6 @@ from .models import MachineType, Profile
 # @receiver(post_save, sender=MachineType)
 # def machine_type_save(sender, instance, created, **kwargs):
 #     instance.save()
-    # if not instance.slug:
-    #     slug = slugify(instance.name)
-    #     instance.save()
+# if not instance.slug:
+#     slug = slugify(instance.name)
+#     instance.save()

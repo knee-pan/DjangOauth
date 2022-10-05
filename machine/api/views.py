@@ -10,7 +10,14 @@ from ..models import MachineType, Profile
 from .permissions import IsAdminOrReadOnly
 from .serializer import MachineTypeSerializer, ProfileSerializer
 
-# from rest_framework.response import Response
+import json
+
+from django.http import JsonResponse
+from django.shortcuts import redirect
+from rest_framework import status
+
+from rest_framework.parsers import FormParser, JSONParser
+from rest_framework.response import Response
 
 
 # redis-cli monitor :If you have configured everything corretly the terminal should output "GET" and "SET" requests when visiting pages that are included in the ModelViewSet along the following lines..

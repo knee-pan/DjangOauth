@@ -2,7 +2,7 @@ import math
 
 from rest_framework import serializers
 
-from machine.models import MachineType, PrintLog, Profile, Machine
+from machine.models import Machine, MachineType, PrintLog, Profile
 
 
 class MachineTypeSerializer(serializers.ModelSerializer):
@@ -17,7 +17,22 @@ class ProfileSerializer(serializers.ModelSerializer):
         exclude = ("updated", "created", "id")
 
 
-class PrintLogSerializer(serializers.ModelSerializer):
+# statistic
+class MachineStatisticSerializer(serializers.ModelSerializer):
+    customer = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Machine
+        fields = ("serial", "customer")
+
+    def get_customer(self, obj):
+        if obj.owner:
+            return obj.owner.username
+        return "-"
+
+
+# statistic
+class PrintLogStatisticSerializer(serializers.ModelSerializer):
     customer = serializers.SerializerMethodField()
     print_time = serializers.SerializerMethodField()
     machine = serializers.SerializerMethodField()
@@ -47,13 +62,35 @@ class PrintLogSerializer(serializers.ModelSerializer):
 
 
 class MachineSerializer(serializers.ModelSerializer):
-    customer = serializers.SerializerMethodField()
+    profiles = ProfileSerializer(many=True, read_only=True)
+    # admin_pass_prefix_key = serializers.SerializerMethodField()
 
     class Meta:
         model = Machine
-        fields = ("serial", "customer")
+        fields = (
+            "serial",
+            "enable_stl_slc",
+            "real_plate_x",
+            "print_area_x",
+            "print_area_y",
+            "led_current",
+            "z_distance",
+            "heating_time",
+            "heater_close_time",
+            "check_status",
+            "bed_heater_temp_limit",
+            "autocenter",
+            # "admin_pass_prefix_key",
+            "profiles",
+        )
 
-    def get_customer(self, obj):
-        if obj.owner:
-            return obj.owner.username
-        return "-"
+    # def get_admin_pass_prefix_key(self, obj):
+    #     return settings.MACHINES_ADMIN_PASS_PREFIX_KEY
+
+
+class MachineLogSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PrintLog
+        exclude = ("machine", "user", "ip", "software_version")
+
+

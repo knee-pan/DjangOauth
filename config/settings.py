@@ -197,7 +197,7 @@ CACHES = {
         "KEY_PREFIX": "example",
     }
 }
-# Session rediste tutulmalı, devamlı değil anlık kaydedilmeli.
+# Session rediste tutulmalı, devamlı değil (dbye değl) anlık kaydedilmeli.
 SESSION_ENGINE = "django.contrib.sessions.backends.cache"
 SESSION_CACHE_ALIAS = "default"
 

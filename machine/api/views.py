@@ -1,8 +1,7 @@
-from datetime import timezone
-
-from django.db.models import Count, F, FloatField, Q, Sum, Value
+from django.db.models import Count, F, FloatField, Sum, Value
 from django.http import JsonResponse
 from django.shortcuts import redirect
+from django.utils import timezone
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import cache_page
 from django.views.decorators.vary import vary_on_cookie
@@ -36,7 +35,7 @@ class ReadOnly(BasePermission):
         return request.method in SAFE_METHODS
 
 
-@method_decorator([vary_on_cookie, cache_page(settings.CACHE_TTL)], name="dispatch")
+@method_decorator([vary_on_cookie, cache_page(cache_page(60 * 60))], name="dispatch")
 class MachineTypeListCreateAPI(ListCreateAPIView):
     serializer_class = MachineTypeSerializer
     queryset = MachineType.objects.all()
@@ -92,24 +91,22 @@ class LogListCreateAPI(ListCreateAPIView):
 # urle ekle.
 class DashboardAPI(RetrieveAPIView, StatisticsViewMixin):
     @method_decorator(cache_page(60 * 60))
-    def get_cache_obj(self, request, *args, **kwargs):
+    def get(self, request, *args, **kwargs):
         machine_ips = (
             Machine.objects.exclude(ip=None).values("ip").annotate(total=Count("ip"))
         )
         total_machine = Machine.objects.count()
-        total_print = PrintLog.objects.log()
+        total_print = PrintLog.objects.count()
 
         # last 24 hour active machine
         date_from = timezone.now() - timezone.timedelta(days=1)
         # gt (greater than, or equal to)
-        last_24h_total_active_machine = Machine.objects.filter(last_activity__gte=date_from).count()
+        last_24h_total_active_machine = Machine.objects.filter(
+            last_activity__gte=date_from
+        ).count()
         # last 24 hour print
         last_24h_print = PrintLog.objects.filter(created__gte=date_from)
-        return machine_ips,total_machine,total_print,last_24h_total_active_machine,last_24h_print
 
-
-    def get(self, request, *args, **kwargs):
-        machine_ips,total_machine,total_print,last_24h_total_active_machine,last_24h_print = self.get_cache_obj
         last_24h_total_print = last_24h_print.count()
         last_24h_total_faulty_print = last_24h_print.filter(
             print_status="faulty"
@@ -145,7 +142,6 @@ class DashboardAPI(RetrieveAPIView, StatisticsViewMixin):
             total_resin = 0.0
 
         content = {
-            
             "total_machine": total_machine,
             "last_24h_total_active_machine": last_24h_total_active_machine,
             # 'total_client': total_client,

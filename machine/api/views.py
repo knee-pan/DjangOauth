@@ -107,21 +107,21 @@ class DashboardAPI(RetrieveAPIView, StatisticsViewMixin):
             last_activity__gte=date_from
         ).count()
         # last 24 hour print
-        last_24h_print = PrintLog.objects.filter(created__gte=date_from)
+        # last_24h_print = PrintLog.objects.filter(created__gte=date_from)
 
-        last_24h_total_print = last_24h_print.count()
-        last_24h_total_faulty_print = last_24h_print.filter(
-            print_status="faulty"
-        ).count()
-        last_24h_total_cancelled_print = last_24h_print.filter(
-            print_status="cancelled"
-        ).count()
-        last_24h_total_unsuccessful_print = last_24h_print.filter(
-            print_status="unsuccessful"
-        ).count()
-        last_24h_total_successful_print = last_24h_print.filter(
-            print_status="successful"
-        ).count()
+        # last_24h_total_print = last_24h_print.count()
+        # last_24h_total_faulty_print = last_24h_print.filter(
+        #     print_status="faulty"
+        # ).count()
+        # last_24h_total_cancelled_print = last_24h_print.filter(
+        #     print_status="cancelled"
+        # ).count()
+        # last_24h_total_unsuccessful_print = last_24h_print.filter(
+        #     print_status="unsuccessful"
+        # ).count()
+        # last_24h_total_successful_print = last_24h_print.filter(
+        #     print_status="successful"
+        # ).count()
 
         # last week active objects
 
@@ -143,16 +143,16 @@ class DashboardAPI(RetrieveAPIView, StatisticsViewMixin):
         if total_resin is None:
             total_resin = 0.0
 
+
+        print(
+            [log for log in PrintLog.objects.filter(created__gte=date_from).values("print_status").annotate(count=Count("print_status"))]
+        )
         content = {
             "total_machine": total_machine,
             "last_24h_total_active_machine": last_24h_total_active_machine,
             # 'total_client': total_client,
             "total_print": total_print,
-            "last_24h_total_print": last_24h_total_print,
-            "last_24h_total_successful_print": last_24h_total_successful_print,
-            "last_24h_total_unsuccessful_print": last_24h_total_unsuccessful_print,
-            "last_24h_total_cancelled_print": last_24h_total_cancelled_print,
-            "last_24h_total_faulty_print": last_24h_total_faulty_print,
+            "Printlog":[log for log in PrintLog.objects.filter(created__gte=date_from).values("print_status").annotate(count=Count("print_status"))],
             "total_resin": "%.1f" % total_resin,
             "machine_ips": [entry for entry in machine_ips],
         }

@@ -393,6 +393,17 @@ class Machine(models.Model):
                 self.software_version = version
                 self.save()
 
+    def save(self, *args, **kwargs):
+        """
+        Alternative way to checking self.pk we can check self._state of the model:
+        - self._state.adding is True creating
+        - self._state.adding is False updating
+        """
+        if self._state.adding:
+            pass
+            # Cache'i temizle, yeni makine oluşturuluyor
+            # raise ValueError("Updating the value of creator isn't allowed")
+        super().save(*args, **kwargs)
 
 
 class PrintLog(models.Model):

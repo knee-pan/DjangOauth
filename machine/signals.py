@@ -1,25 +1,21 @@
-from django.db.models.signals import m2m_changed, post_save, pre_delete
+from django.core.cache import cache
+from django.db.models.signals import post_delete, post_save
 from django.dispatch import receiver
 
-from .models import MachineType, Profile
-
-# @receiver(post_save, sender=Profile)
-# def profile_mType_save(sender, instance, **kwargs):
-#     instance.machine_type.add()
+from .models import Machine
 
 
-# # post_save.connect(machine_type_save, sender=Profile)
+@receiver(post_delete, sender=Machine)
+def if_removed_clear_cache(sender, instance, **kwargs):
+    cache.clear()
+    # cache.delete("objects")
 
 
-# @receiver(pre_delete, sender=MachineType)
-# def machine_type_pre_delete(sender, instance, created, **kwargs):
-#     # move or make back up of this data
-#     print(instance.id, "will be remove")
+@receiver(post_save, sender=Machine)
+def if_crated_clear_cache(sender, instance, created, **kwargs):
+    """Cache temizleniyor sessiondan atiyor"""
+    if created:
+        print("calisti")
+        cache.clear()
 
-
-# @receiver(post_save, sender=MachineType)
-# def machine_type_save(sender, instance, created, **kwargs):
-#     instance.save()
-# if not instance.slug:
-#     slug = slugify(instance.name)
-#     instance.save()
+    # cache.delete("objects")

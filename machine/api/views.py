@@ -12,6 +12,7 @@ from rest_framework.generics import (
     RetrieveAPIView,
 )
 from rest_framework.permissions import SAFE_METHODS, BasePermission
+from silk.profiling.profiler import silk_profile
 
 from config import settings
 from config.mixins import StatisticsViewMixin
@@ -24,7 +25,6 @@ from .serializer import (
     MachineTypeSerializer,
     ProfileSerializer,
 )
-from silk.profiling.profiler import silk_profile
 
 # redis-cli monitor :If you have configured everything corretly the terminal should output "GET" and "SET" requests when visiting pages that are included in the ModelViewSet along the following lines..
 # @method_decorator(vary_on_cookie)
@@ -91,8 +91,8 @@ class LogListCreateAPI(ListCreateAPIView):
 # Verileri Cache hazırla.
 # urle ekle.
 class DashboardAPI(RetrieveAPIView, StatisticsViewMixin):
-    @silk_profile(name='View Dashboard')
-    @method_decorator(cache_page(60 * 60))
+    # @method_decorator(cache_page(60 * 60))
+    @silk_profile(name="View Dashboard")
     def get(self, request, *args, **kwargs):
         machine_ips = (
             Machine.objects.exclude(ip=None).values("ip").annotate(total=Count("ip"))

@@ -37,7 +37,7 @@ class ReadOnly(BasePermission):
         return request.method in SAFE_METHODS
 
 
-@method_decorator([vary_on_cookie, cache_page(cache_page(60 * 60))], name="dispatch")
+# @method_decorator([vary_on_cookie, cache_page(cache_page(60 * 60))], name="dispatch")
 class MachineTypeListCreateAPI(ListCreateAPIView):
     serializer_class = MachineTypeSerializer
     queryset = MachineType.objects.all()
@@ -92,7 +92,7 @@ class LogListCreateAPI(ListCreateAPIView):
 # Verileri Cache hazırla.
 # urle ekle.
 class DashboardAPI(RetrieveAPIView, StatisticsViewMixin):
-    # @method_decorator(cache_page(60 * 60))
+    # @method_decorator(cache_page(60 * 60)) # cache_page(saniye * adet)
     @silk_profile(name="View Dashboard")
     def get(self, request, *args, **kwargs):
         machine_ips = (
@@ -174,5 +174,6 @@ class DashboardAPI(RetrieveAPIView, StatisticsViewMixin):
             "total_resin": "%.1f" % total_resin,
             "total_resin_cache": cache.get('total_resin_cache'),
             "machine_ips": [entry for entry in machine_ips],
+            "Machine Count":cache.get_or_set('count', Machine.objects.count(), 100)
         }
         return JsonResponse(content)

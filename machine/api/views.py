@@ -95,85 +95,41 @@ class DashboardAPI(RetrieveAPIView, StatisticsViewMixin):
     # @method_decorator(cache_page(60 * 60)) # cache_page(saniye * adet)
     @silk_profile(name="View Dashboard")
     def get(self, request, *args, **kwargs):
-        machine_ips = (
-            Machine.objects.exclude(ip=None).values("ip").annotate(total=Count("ip"))
-        )
-        total_machine = Machine.objects.count()
-        total_print = PrintLog.objects.count()
+        machine_ips = (Machine.objects.exclude(ip=None).values("ip").annotate(total=Count("ip")))
+        date_from = timezone.now() - timezone.timedelta(days=1)
 
+        # total_machine = Machine.objects.count()
+        # total_print = PrintLog.objects.count()
+        # last_24h_total_active_machine = Machine.objects.filter(last_activity__gte=date_from).count()
         cache.set('machine_count_cache', Machine.objects.count())
         cache.set('log_count_cache', PrintLog.objects.count())
-
         # last 24 hour active machine
-        date_from = timezone.now() - timezone.timedelta(days=1)
-        # gt (greater than, or equal to)
-        last_24h_total_active_machine = Machine.objects.filter(
-            last_activity__gte=date_from
-        ).count()
-        # last 24 hour print
-        # last_24h_print = PrintLog.objects.filter(created__gte=date_from)
-
-        # last_24h_total_print = last_24h_print.count()
-        # last_24h_total_faulty_print = last_24h_print.filter(
-        #     print_status="faulty"
-        # ).count()
-        # last_24h_total_cancelled_print = last_24h_print.filter(
-        #     print_status="cancelled"
-        # ).count()
-        # last_24h_total_unsuccessful_print = last_24h_print.filter(
-        #     print_status="unsuccessful"
-        # ).count()
-        # last_24h_total_successful_print = last_24h_print.filter(
-        #     print_status="successful"
-        # ).count()
-
-        # last week active objects
+        cache.set('last_24h_total_active_machine', Machine.objects.filter(last_activity__gte=date_from).count())
 
         date_from_week = timezone.now() - timezone.timedelta(days=7)
-
         # recine hesabi
-        total_resin = (
-            PrintLog.objects.filter(
-                print_stop__gte=date_from_week, total_solid_area__range=(0, 50)
-            )
-            .aggregate(
-                total_spent=Sum(
-                    F("total_solid_area") * Value(0.0023), output_field=FloatField()
-                )
-            )
-            .get("total_spent")
-        )
+        total_resin = (PrintLog.objects.filter(print_stop__gte=date_from_week, total_solid_area__range=(0, 50)).aggregate(
+                total_spent=Sum(F("total_solid_area") * Value(0.0023), output_field=FloatField())).get("total_spent"))
 
         if total_resin is None:
             total_resin = 0.0
 
         # Eğer reçine hesabını 30 saniyede bir gibi bir sürede cachelemek istiyorsak:
-        cache.set('total_resin_cache',str(
-            PrintLog.objects.filter(
-                print_stop__gte=date_from_week, total_solid_area__range=(0, 50)
-            )
-            .aggregate(
-                total_spent=Sum(
-                    F("total_solid_area") * Value(0.0023), output_field=FloatField()
-                )
-            )
-            .get("total_spent")
-        ), 30)
+        cache.set('total_resin_cache',str(PrintLog.objects.filter(print_stop__gte=date_from_week, total_solid_area__range=(0, 50)).aggregate(
+                total_spent=Sum(F("total_solid_area") * Value(0.0023), output_field=FloatField())).get("total_spent")),30)
 
-        print(
-            [log for log in PrintLog.objects.filter(created__gte=date_from).values("print_status").annotate(count=Count("print_status"))]
-        )
         content = {
-            "total_machine": total_machine,
-            "machine_count_cache": cache.get('machine_count_cache'),
-            "last_24h_total_active_machine": last_24h_total_active_machine,
-            # 'total_client': total_client,
-            "total_print": total_print,
-            "log_count_cache": cache.get('log_count_cache'),
-            "Printlog":[log for log in PrintLog.objects.filter(created__gte=date_from).values("print_status").annotate(count=Count("print_status"))],
+            # "total_machine": total_machine,
+            # "total_print": total_print,
+            # "last_24h_total_active_machine": last_24h_total_active_machine,
             "total_resin": "%.1f" % total_resin,
-            "total_resin_cache": cache.get('total_resin_cache'),
+            "machine_count_cache": cache.get('machine_count_cache'),
+            "log_count_cache": cache.get('log_count_cache'),
+            "last_24h_total_active_machine_cache": cache.get('last_24h_total_active_machine'),
+            # # "total_resin_cache": cache.get('total_resin_cache'),
+            # #"Machine Count":cache.get_or_set('count', Machine.objects.count(), 100),
+            "Printlog":[log for log in PrintLog.objects.filter(created__gte=date_from).values("print_status").annotate(count=Count("print_status"))],
             "machine_ips": [entry for entry in machine_ips],
-            "Machine Count":cache.get_or_set('count', Machine.objects.count(), 100)
+            
         }
         return JsonResponse(content)

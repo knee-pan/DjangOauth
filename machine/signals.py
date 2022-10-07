@@ -18,4 +18,4 @@ def if_crated_clear_cache(sender, instance, created, **kwargs):
     if created:
         print("calisti")
         # cache.clear() # sadece makine ile ilgili olanları değil her keyi siler.
-        print(cache.delete("machine_count_cache"))
+        cache.delete("machine_count_cache")

@@ -385,7 +385,8 @@ class Machine(models.Model):
 
     def update_last_activity(self):
         self.last_activity = timezone.now()
-        cache.clear()
+        cache.delete('last_24h_total_active_machine_cache')
+        #cache.clear()
         self.save()
 
     def update_software_version(self, version):

@@ -104,7 +104,7 @@ class DashboardAPI(RetrieveAPIView, StatisticsViewMixin):
         cache.set('machine_count_cache', Machine.objects.count())
         cache.set('log_count_cache', PrintLog.objects.count())
         # last 24 hour active machine
-        cache.set('last_24h_total_active_machine', Machine.objects.filter(last_activity__gte=date_from).count())
+        cache.set('last_24h_total_active_machine_cache', Machine.objects.filter(last_activity__gte=date_from).count())
 
         date_from_week = timezone.now() - timezone.timedelta(days=7)
         # recine hesabi
@@ -125,11 +125,11 @@ class DashboardAPI(RetrieveAPIView, StatisticsViewMixin):
             "total_resin": "%.1f" % total_resin,
             "machine_count_cache": cache.get('machine_count_cache'),
             "log_count_cache": cache.get('log_count_cache'),
-            "last_24h_total_active_machine_cache": cache.get('last_24h_total_active_machine'),
+            "last_24h_total_active_machine_cache": cache.get('last_24h_total_active_machine_cache'),
             # # "total_resin_cache": cache.get('total_resin_cache'),
             # #"Machine Count":cache.get_or_set('count', Machine.objects.count(), 100),
             "Printlog":[log for log in PrintLog.objects.filter(created__gte=date_from).values("print_status").annotate(count=Count("print_status"))],
             "machine_ips": [entry for entry in machine_ips],
-            
+
         }
         return JsonResponse(content)

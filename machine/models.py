@@ -9,7 +9,7 @@ from django.core.validators import (
     RegexValidator,
 )
 from django.db import models
-
+from django.core.cache import cache
 # Create your models here.
 
 
@@ -385,6 +385,7 @@ class Machine(models.Model):
 
     def update_last_activity(self):
         self.last_activity = timezone.now()
+        cache.clear()
         self.save()
 
     def update_software_version(self, version):

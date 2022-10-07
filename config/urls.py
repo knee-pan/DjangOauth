@@ -45,7 +45,7 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("o/", include("oauth2_provider.urls", namespace="oauth2_provider1")),
     path("", include("account.api.urls", namespace="acc_api")),
-    path("machine/", include("machine.api.urls")),
+    path("machine/", include("machine.api.urls"), name="machine_app"),
     # url("swg", schema_view1),
     re_path(
         r"^doc(?P<format>\.json|\.yaml)$",

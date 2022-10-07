@@ -9,7 +9,7 @@ from machine.api.views import (
     ProfileCreateAPI,
     ProfileListAPI,
 )
-
+app_name="machine_app"
 urlpatterns = [
     path("type/", MachineTypeListCreateAPI.as_view(), name="type_list_create"),
     path("profiles/", ProfileListAPI.as_view(), name="profiles"),

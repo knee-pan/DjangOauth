@@ -1,3 +1,4 @@
+from django.core.cache import cache
 from django.db.models import Count, F, FloatField, Sum, Value
 from django.http import JsonResponse
 from django.shortcuts import redirect
@@ -100,6 +101,9 @@ class DashboardAPI(RetrieveAPIView, StatisticsViewMixin):
         total_machine = Machine.objects.count()
         total_print = PrintLog.objects.count()
 
+        cache.set('machine_count_cache', Machine.objects.count())
+        cache.set('log_count_cache', PrintLog.objects.count())
+
         # last 24 hour active machine
         date_from = timezone.now() - timezone.timedelta(days=1)
         # gt (greater than, or equal to)
@@ -143,17 +147,32 @@ class DashboardAPI(RetrieveAPIView, StatisticsViewMixin):
         if total_resin is None:
             total_resin = 0.0
 
+        # Eğer reçine hesabını 30 saniyede bir gibi bir sürede cachelemek istiyorsak:
+        cache.set('total_resin_cache',str(
+            PrintLog.objects.filter(
+                print_stop__gte=date_from_week, total_solid_area__range=(0, 50)
+            )
+            .aggregate(
+                total_spent=Sum(
+                    F("total_solid_area") * Value(0.0023), output_field=FloatField()
+                )
+            )
+            .get("total_spent")
+        ), 30)
 
         print(
             [log for log in PrintLog.objects.filter(created__gte=date_from).values("print_status").annotate(count=Count("print_status"))]
         )
         content = {
             "total_machine": total_machine,
+            "machine_count_cache": cache.get('machine_count_cache'),
             "last_24h_total_active_machine": last_24h_total_active_machine,
             # 'total_client': total_client,
             "total_print": total_print,
+            "log_count_cache": cache.get('log_count_cache'),
             "Printlog":[log for log in PrintLog.objects.filter(created__gte=date_from).values("print_status").annotate(count=Count("print_status"))],
             "total_resin": "%.1f" % total_resin,
+            "total_resin_cache": cache.get('total_resin_cache'),
             "machine_ips": [entry for entry in machine_ips],
         }
         return JsonResponse(content)

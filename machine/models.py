@@ -1,4 +1,5 @@
 
+from time import time
 from django.utils import timezone
 from django.contrib.auth.models import User
 from django.core.cache import cache
@@ -385,9 +386,11 @@ class Machine(models.Model):
         self.save()
 
     def update_last_activity(self):
+        condition = timezone.now()-timezone.timedelta(minutes=30)
+        if self.last_activity < condition:
+            cache.delete("last_24h_total_active_machine_cache")
+
         self.last_activity = timezone.now()
-        cache.delete("last_24h_total_active_machine_cache")
-        print("calisti")
         self.save()
 
     def update_software_version(self, version):

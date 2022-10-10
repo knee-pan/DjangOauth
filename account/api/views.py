@@ -50,7 +50,7 @@ class UserList(ListAPIView):
 class UserCreate(CreateAPIView):  # register
     serializer_class = UserCreateSerializer
     queryset = User.objects.all()
-    permission_classes = [IsAdminUser]
+    # permission_classes = [IsAdminUser]
     throttle_classes = [
         RegisterThrottle,
     ]

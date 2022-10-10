@@ -79,7 +79,12 @@ class MachineDetail(RetrieveAPIView):
     lookup_field = "pk"
 
 
-class MachineListCreateAPI(ListCreateAPIView):
+class MachineListAPI(ListAPIView):
+    serializer_class = MachineSerializer
+    queryset = Machine.objects.all()
+
+
+class MachineCreateAPI(CreateAPIView):
     serializer_class = MachineSerializer
     queryset = Machine.objects.all()
 
@@ -91,43 +96,28 @@ class LogListCreateAPI(ListCreateAPIView):
 
 # Verileri Cache hazırla.
 # urle ekle.
+
+
+# DASHBOARD APIDE DEĞİL, MODELDE SETLE, DASHBOARD APIDE GET İLE AL CASHLENMİŞ VERİLERİ.
 class DashboardAPI(RetrieveAPIView, StatisticsViewMixin):
     # @method_decorator(cache_page(60 * 60)) # cache_page(saniye * adet)
     @silk_profile(name="View Dashboard")
     def get(self, request, *args, **kwargs):
-        machine_ips = (Machine.objects.exclude(ip=None).values("ip").annotate(total=Count("ip")))
-        date_from = timezone.now() - timezone.timedelta(days=1)
-
-        # total_machine = Machine.objects.count()
-        # total_print = PrintLog.objects.count()
-        # last_24h_total_active_machine = Machine.objects.filter(last_activity__gte=date_from).count()
-        cache.set('machine_count_cache', Machine.objects.count())
-        cache.set('log_count_cache', PrintLog.objects.count())
-        # last 24 hour active machine
-        cache.set('last_24h_total_active_machine_cache', Machine.objects.filter(last_activity__gte=date_from).count())
-
         date_from_week = timezone.now() - timezone.timedelta(days=7)
+        date_from = timezone.now() - timezone.timedelta(days=1)
+        machine_ips = (Machine.objects.exclude(ip=None).values("ip").annotate(total=Count("ip")))
         # recine hesabi
         total_resin = (PrintLog.objects.filter(print_stop__gte=date_from_week, total_solid_area__range=(0, 50)).aggregate(
                 total_spent=Sum(F("total_solid_area") * Value(0.0023), output_field=FloatField())).get("total_spent"))
-
         if total_resin is None:
             total_resin = 0.0
 
-        # Eğer reçine hesabını 30 saniyede bir gibi bir sürede cachelemek istiyorsak:
-        cache.set('total_resin_cache',str(PrintLog.objects.filter(print_stop__gte=date_from_week, total_solid_area__range=(0, 50)).aggregate(
-                total_spent=Sum(F("total_solid_area") * Value(0.0023), output_field=FloatField())).get("total_spent")),30)
 
         content = {
-            # "total_machine": total_machine,
-            # "total_print": total_print,
-            # "last_24h_total_active_machine": last_24h_total_active_machine,
             "total_resin": "%.1f" % total_resin,
-            "machine_count_cache": cache.get('machine_count_cache'),
-            "log_count_cache": cache.get('log_count_cache'),
-            "last_24h_total_active_machine_cache": cache.get('last_24h_total_active_machine_cache'),
-            # # "total_resin_cache": cache.get('total_resin_cache'),
-            # #"Machine Count":cache.get_or_set('count', Machine.objects.count(), 100),
+            "machine_machine_count_cache": Machine.get_machine_count_cache(),
+            "machine_printlog_count_cache": PrintLog.machine_printlog_count(),
+            "last_24h_total_active_machine_cache": Machine.get_active_machine(),
             "Printlog":[log for log in PrintLog.objects.filter(created__gte=date_from).values("print_status").annotate(count=Count("print_status"))],
             "machine_ips": [entry for entry in machine_ips],
 

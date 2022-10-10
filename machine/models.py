@@ -1,6 +1,7 @@
-from datetime import timezone
 
+from django.utils import timezone
 from django.contrib.auth.models import User
+from django.core.cache import cache
 from django.core.exceptions import ValidationError
 from django.core.validators import (
     MaxValueValidator,
@@ -9,7 +10,7 @@ from django.core.validators import (
     RegexValidator,
 )
 from django.db import models
-from django.core.cache import cache
+
 # Create your models here.
 
 
@@ -385,8 +386,8 @@ class Machine(models.Model):
 
     def update_last_activity(self):
         self.last_activity = timezone.now()
-        cache.delete('last_24h_total_active_machine_cache')
-        #cache.clear()
+        cache.delete("last_24h_total_active_machine_cache")
+        print("calisti")
         self.save()
 
     def update_software_version(self, version):
@@ -394,6 +395,23 @@ class Machine(models.Model):
             if self.software_version != version:
                 self.software_version = version
                 self.save()
+
+    @classmethod
+    def get_machine_count_cache(cls):  # signals.py'da clear ediliyor
+        if machine_count := cache.get("machine_machine_count_cache"):
+            return machine_count
+        return cache.get_or_set("machine_machine_count_cache", cls.objects.count())
+        # cache.get_or_set('machine_count_cache', Machine.objects.count(), 100),
+
+    @classmethod
+    def get_active_machine(cls):
+        if active_machine := cache.get("last_24h_total_active_machine_cache"):
+            return active_machine
+
+        date_from = timezone.now() - timezone.timedelta(days=1)
+        return cache.get_or_set("last_24h_total_active_machine_cache",cls.objects.filter(last_activity__gte=date_from).count(),10)
+        # 3. parametre bittiğinde-süre bittiğinde cache delete mi oluyor?
+        # cache.set('last_24h_total_active_machine_cache', Machine.objects.filter(last_activity__gte=date_from).count())
 
     def save(self, *args, **kwargs):
         """
@@ -462,3 +480,18 @@ class PrintLog(models.Model):
 
             return int(print_time.seconds / 60)
         return 0
+
+    # @classmethod
+    # def machine_printlog_count(cls):  # signals.py'da clear ediliyor
+    #     if printlog_count := cache.get("machine_printlog_count_cache") is not None:
+    #         return printlog_count
+    #     print_log_count = cls.objects.count()
+    #     cache.set("machine_printlog_count_cache", print_log_count)
+    #     return print_log_count
+
+    @classmethod
+    def machine_printlog_count(cls):  # signals.py'da clear ediliyor
+        print("calisti",cache.get("machine_printlog_count_cache"))
+        if printlog_count := cache.get("machine_printlog_count_cache"):
+            return printlog_count
+        return cache.get_or_set("machine_printlog_count_cache", cls.objects.count())

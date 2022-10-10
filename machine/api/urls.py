@@ -4,18 +4,21 @@ from machine.api.views import (
     DashboardAPI,
     LogListCreateAPI,
     MachineDetail,
-    MachineListCreateAPI,
+    MachineListAPI,
+    MachineCreateAPI,
     MachineTypeListCreateAPI,
     ProfileCreateAPI,
     ProfileListAPI,
 )
-app_name="machine_app"
+
+app_name = "machine_app"
 urlpatterns = [
     path("type/", MachineTypeListCreateAPI.as_view(), name="type_list_create"),
     path("profiles/", ProfileListAPI.as_view(), name="profiles"),
     path("profile_create/", ProfileCreateAPI.as_view(), name="profile_create"),
     path("detail/<pk>", MachineDetail.as_view(), name="detail"),
-    path("list/", MachineListCreateAPI.as_view(), name="list"),
+    path("list/", MachineListAPI.as_view(), name="list"),
+    path("create/", MachineCreateAPI.as_view(), name="create"),
     path("log_list/", LogListCreateAPI.as_view(), name="log_list"),
     path("dashboard_cache/", DashboardAPI.as_view(), name="dashboard_cache"),
 ]
